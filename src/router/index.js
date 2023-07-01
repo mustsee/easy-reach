@@ -1,6 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+// Why hash history
+// https://stackoverflow.com/questions/65501787/vue-router-github-pages-and-custom-domain-not-working-with-routed-links?noredirect=1&lq=1
+// https://stackoverflow.com/questions/48521177/404-when-reloading-a-vue-website-published-to-github-pages/65539760#65539760
+
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
