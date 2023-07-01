@@ -6,15 +6,16 @@ import {
   signInWithPopup,
   signOut
 } from 'firebase/auth'
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useUserStore } from '../stores/UserStore'
 
-const user = ref(null)
+const store = useUserStore()
 
 const signInWithGoogle = () => {
   const provider = new GoogleAuthProvider()
   signInWithPopup(getAuth(), provider)
     .then((result) => {
-      user.value = result.user.displayName
+      store.setUser(result.user)
     })
     .catch((error) => {
       console.log('error', error)
@@ -24,17 +25,17 @@ const signInWithGoogle = () => {
 const logOut = () => {
   signOut(getAuth())
     .then(() => {
-      user.value = null
+      store.setUser(null)
     })
     .catch((error) => console.log('error', error))
 }
 
 onMounted(() => {
-  onAuthStateChanged(getAuth(), (client) => {
-    if (client) {
-      user.value = client.displayName
+  onAuthStateChanged(getAuth(), (user) => {
+    if (user) {
+      store.setUser(user)
     } else {
-      user.value = null
+      store.setUser(null)
     }
   })
 })
@@ -43,7 +44,7 @@ onMounted(() => {
 <template>
   <main>
     <button @click="signInWithGoogle">Sign in with Google</button>
-    <div>User name : {{ user }}</div>
+    <div>User : {{ store.user && store.userEmail }}</div>
     <button @click="logOut">Sign Out</button>
   </main>
 </template>
