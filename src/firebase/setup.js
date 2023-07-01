@@ -1,8 +1,14 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
+import { getAuth, connectAuthEmulator } from 'firebase/auth'
+
+const apiKey =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_PROD_API_KEY
+    : import.meta.env.VITE_DEV_API_KEY
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB9qi8KWgD9LtIERZHMKyf09oDGN4kPKKQ',
+  apiKey,
   authDomain: 'easy-reach-1f358.firebaseapp.com',
   projectId: 'easy-reach-1f358',
   storageBucket: 'easy-reach-1f358.appspot.com',
@@ -10,5 +16,13 @@ const firebaseConfig = {
   appId: '1:344931134629:web:c0e7bd69de1f0c383f714c'
 }
 
-export const firebaseApp = initializeApp(firebaseConfig)
-export const firestoreDb = getFirestore(firebaseApp)
+const firebaseApp = initializeApp(firebaseConfig)
+const firestoreDb = getFirestore(firebaseApp)
+const fireAuth = getAuth(firebaseApp)
+
+if (import.meta.env.MODE !== 'production') {
+  connectFirestoreEmulator(firestoreDb, 'localhost', 8080)
+  connectAuthEmulator(fireAuth, 'http://localhost:9099')
+}
+
+export { firebaseApp, firestoreDb, fireAuth }

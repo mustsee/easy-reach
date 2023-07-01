@@ -1,26 +1,21 @@
 <script setup>
-import {
-  getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut
-} from 'firebase/auth'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
 import { onMounted } from 'vue'
-import router from "@/router";
+import router from '@/router'
 import { useUserStore } from '../stores/UserStore'
+import { fireAuth } from '../firebase/setup'
 import { isUserAuthorized } from '../firebase/firestore'
 
 const store = useUserStore()
 
 const signInWithGoogle = () => {
   const provider = new GoogleAuthProvider()
-  signInWithPopup(getAuth(), provider)
+  signInWithPopup(fireAuth, provider)
     .then((result) => {
       isUserAuthorized(result.user.email)
         .then(() => {
           store.setUser(result.user)
-          router.push({name: "Arrivals"});
+          router.push({ name: 'Arrivals' })
         })
         .catch((error) => {
           console.log(error.message)
@@ -33,7 +28,7 @@ const signInWithGoogle = () => {
 }
 
 const logOut = () => {
-  signOut(getAuth())
+  signOut(fireAuth)
     .then(() => {
       store.setUser(null)
     })
@@ -41,7 +36,7 @@ const logOut = () => {
 }
 
 onMounted(() => {
-  onAuthStateChanged(getAuth(), (user) => {
+  onAuthStateChanged(fireAuth, (user) => {
     if (user) {
       store.setUser(user)
     } else {
@@ -53,8 +48,11 @@ onMounted(() => {
 
 <template>
   <main>
-    <button @click="signInWithGoogle">Sign in with Google</button>
-    <div>User : {{ store.user && store.userEmail }}</div>
-    <button @click="logOut">Sign Out</button>
+    <div>
+      <button @click="signInWithGoogle">Sign in with Google</button>
+    </div>
+    <div>
+      <button @click="logOut">Sign Out</button>
+    </div>
   </main>
 </template>
