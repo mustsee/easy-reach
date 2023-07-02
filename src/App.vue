@@ -4,7 +4,7 @@ import { RouterView } from 'vue-router'
 
 <template>
   <header>
-    <div>Easy Reach</div>
+    <div class="text-3xl font-bold underline">Easy Reach</div>
     <div></div>
   </header>
 
