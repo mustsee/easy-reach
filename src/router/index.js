@@ -29,24 +29,20 @@ const router = createRouter({
   ]
 })
 
-
 // https://www.youtube.com/watch?v=xceR7mrrXsA&t=473s&ab_channel=LearnVue
 // https://github.com/vuejs/vuefire/issues/18
 const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
     const store = useUserStore()
-    onAuthStateChanged(
-      getAuth(),
-      (user) => {
-        if (user) {
-          store.setUser(user)
-          resolve(user)
-        } else {
-          store.setUser(null)
-          reject('User not logged in')
-        }
-      },
-    )
+    onAuthStateChanged(getAuth(), (user) => {
+      if (user) {
+        store.setUser(user)
+        resolve(user)
+      } else {
+        store.setUser(null)
+        reject('User not logged in')
+      }
+    })
   })
 }
 
