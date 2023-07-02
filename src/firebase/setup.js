@@ -18,11 +18,10 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig)
 const firestoreDb = getFirestore(firebaseApp)
-const fireAuth = getAuth(firebaseApp)
 
 if (import.meta.env.MODE !== 'production') {
   connectFirestoreEmulator(firestoreDb, 'localhost', 8080)
-  connectAuthEmulator(fireAuth, 'http://localhost:9099')
+  connectAuthEmulator(getAuth(), 'http://localhost:9099')
 }
 
-export { firebaseApp, firestoreDb, fireAuth }
+export { firebaseApp, firestoreDb }

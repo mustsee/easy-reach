@@ -1,16 +1,15 @@
 <script setup>
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
-import { onMounted } from 'vue'
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import router from '@/router'
 import { useUserStore } from '../stores/UserStore'
-import { fireAuth } from '../firebase/setup'
+import { getAuth } from 'firebase/auth'
 import { isUserAuthorized } from '../firebase/firestore'
 
 const store = useUserStore()
 
 const signInWithGoogle = () => {
   const provider = new GoogleAuthProvider()
-  signInWithPopup(fireAuth, provider)
+  signInWithPopup(getAuth(), provider)
     .then((result) => {
       isUserAuthorized(result.user.email)
         .then(() => {
@@ -28,22 +27,12 @@ const signInWithGoogle = () => {
 }
 
 const logOut = () => {
-  signOut(fireAuth)
+  signOut(getAuth())
     .then(() => {
       store.setUser(null)
     })
     .catch((error) => console.log('error', error))
 }
-
-onMounted(() => {
-  onAuthStateChanged(fireAuth, (user) => {
-    if (user) {
-      store.setUser(user)
-    } else {
-      store.setUser(null)
-    }
-  })
-})
 </script>
 
 <template>
