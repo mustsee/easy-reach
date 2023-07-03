@@ -7,6 +7,7 @@ import {
   doc,
   query,
   limit,
+  orderBy,
   where,
   setDoc,
   collectionGroup,
@@ -15,9 +16,12 @@ import {
 import { firestoreDb } from './setup'
 
 export const queryByCollection = async (col) => {
-  const colRef = collection(firestoreDb, col)
+  const q = query(
+    collection(firestoreDb, col),
+    orderBy("created_at")
+  );
 
-  const snapshot = await getDocs(colRef)
+  const snapshot = await getDocs(q)
 
   const docs = Array.from(snapshot.docs).map((doc) => {
     return {

@@ -20,6 +20,9 @@ export const useArrivalsOptionsStore = defineStore('arrivalsOptions', {
   }),
   getters: {},
   actions: {
+    setSenderNames(value) {
+      this.senderNames = value
+    },
     setCurrentSenderName(value) {
       this.currentSenderName = value
     },

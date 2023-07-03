@@ -2,6 +2,14 @@
 import router from '@/router'
 import { getAuth, signOut } from 'firebase/auth'
 import { useUserStore } from '../stores/UserStore'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const isActiveRoute = (path) => {
+  if (route.path === path) return 'bg-gray-600'
+  return ''
+}
 
 const store = useUserStore()
 
@@ -26,10 +34,26 @@ const logOut = () => {
           Easy Reach
         </router-link>
       </div>
+      <div class="flex items-center gap-4">
+        <router-link
+          to="/arrivals"
+          :class="`w-28 py-1.5 text-center text-sm text-white border border-gray-100 ${isActiveRoute(
+            '/arrivals'
+          )}`"
+          >ARRIVALS</router-link
+        >
+        <router-link
+          to="/settings"
+          :class="`w-28 py-1.5 text-center text-sm text-white border border-gray-100 ${isActiveRoute(
+            '/settings'
+          )}`"
+          >SETTINGS</router-link
+        >
+      </div>
       <div
         v-if="store.user"
         @click="logOut"
-        class="text-white text-lg flex items-center px-4 cursor-pointer hover:text-gray-100"
+        class="text-white flex items-center px-4 cursor-pointer hover:text-gray-100"
       >
         Sign out
       </div>
