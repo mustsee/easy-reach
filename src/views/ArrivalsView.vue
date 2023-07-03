@@ -1,5 +1,12 @@
+<script setup>
+import ArrivalsMenu from './../components/arrivals/ArrivalsMenu.vue'
+
+const getNumberOfGuests = 4
+const getBookings = []
+</script>
+
 <template>
-  <div>This is an arrivals page</div>
+  <arrivals-menu :numberOfGuests="getNumberOfGuests" :bookings="getBookings" />
 </template>
 
 <style></style>

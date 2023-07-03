@@ -29,6 +29,25 @@ export const queryByCollection = async (col) => {
   return docs
 }
 
+export const set = async (col, document) => {
+  await setDoc(doc(collection(firestoreDb, col)), document, { merge: true })
+}
+
+export const add = async (col, document) => {
+  const colRef = collection(firestoreDb, col)
+
+  const docRef = await addDoc(colRef, document)
+
+  return docRef
+}
+
+export const del = async (col, id) => {
+  const docRef = doc(firestoreDb, col, id)
+  return await deleteDoc(docRef)
+}
+
+/* CUSTOM FUNCTIONS */
+
 export const isUserAuthorized = async (userEmail) => {
   const q = query(collection(firestoreDb, 'users'), where('email', '==', userEmail), limit(1))
 
@@ -46,21 +65,4 @@ export const isUserAuthorized = async (userEmail) => {
   } else {
     return true
   }
-}
-
-export const set = async (col, document) => {
-  await setDoc(doc(collection(firestoreDb, col)), document, { merge: true })
-}
-
-export const add = async (col, document) => {
-  const colRef = collection(firestoreDb, col)
-
-  const docRef = await addDoc(colRef, document)
-
-  return docRef
-}
-
-export const del = async (col, id) => {
-  const docRef = doc(firestoreDb, col, id)
-  return await deleteDoc(docRef)
 }
