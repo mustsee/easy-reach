@@ -24,12 +24,11 @@
         <p
           class="flex items-center justify-center text-sm sm:text-base text-center tracking-wider font-medium uppercase text-gray-500 px-2 sm:px-8 sm:w-96 select-none"
         >
-          <span>{{ displayDate }}</span>
+          <span>{{ store.displayDate }}</span>
           <!-- Find where is the best to put this button -->
           <span
             @click="handleLoadData"
-            :class="[!debounceLoadData && lastUpdate ? '' : 'pointer-events-none opacity-50']"
-            :title="`Last update: ${lastUpdate}`"
+            :class="[!debounceLoadData ? '' : 'pointer-events-none opacity-50']"
           >
             <svg
               fill="currentColor"
@@ -64,90 +63,56 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex'
+<script setup>
+import { ref } from 'vue'
+import { useDateStore } from '../../stores/DateStore'
 
-export default {
-  props: ['date', 'removeBorder'],
-  data() {
-    return {
-      debounce: false,
-      debounceLoadData: false,
-      minOffSet: -10,
-      maxOffSet: 10,
-      offSet: 0,
-      options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-    }
-  },
-  computed: {
-    currentDate() {
-      return this.$store.state.currentDate
-    },
-    apiDate() {
-      return this.$store.getters.apiDate
-    },
-    lastUpdate() {
-      const updatedAt = this.$store.state.lastUpdates[this.apiDate]
-      if (updatedAt) {
-        let date = new Date(updatedAt.seconds * 1000)
-        return `${date.toLocaleDateString('en-GB')} ${date.getHours()}h${
-          date.getMinutes() < 10 ? '0' : ''
-        }${date.getMinutes()}`
-      }
-    },
-    displayDate() {
-      const { currentDate, options } = this
-      if (currentDate) {
-        return currentDate.toLocaleDateString('en-GB', options)
-      }
-    }
-  },
-  methods: {
-    ...mapActions({
-      loadGuestsData: 'loadGuestsData',
-      writeGuestsData: 'writeGuestsData',
-      dateLastUpdates: 'dateLastUpdates'
-    }),
-    handlePreviousDate() {
-      if (this.debounce) return
-      this.debounce = true
-      this.offSet = this.offSet - 1
-      let currentDate = new Date(this.currentDate.setDate(this.currentDate.getDate() - 1))
-      this.$store.commit('setCurrentDate', currentDate)
-      this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
-    },
-    handleNextDate() {
-      if (this.debounce) return
-      this.debounce = true
-      this.offSet = this.offSet + 1
-      let currentDate = new Date(this.currentDate.setDate(this.currentDate.getDate() + 1))
-      this.$store.commit('setCurrentDate', currentDate)
-      this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
-    },
-    handleLoadData() {
-      // SetTimeout on 5 seconds
-      if (this.debounceLoadData) return
-      this.debounceLoadData = true
-      this.$store
+defineProps(['removeBorder'])
+
+const store = useDateStore()
+
+const offSet = ref(0)
+const minOffSet = -10
+const maxOffSet = 10
+
+const debounce = ref(false)
+const debounceLoadData = ref(false)
+
+let now = new Date()
+let currentDate = new Date(now.setDate(now.getDate() + 2))
+store.setCurrentDate(currentDate)
+
+const handlePreviousDate = () => {
+  if (debounce.value) return
+  debounce.value = true
+  offSet.value -= 1
+  let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() - 1))
+  store.setCurrentDate(currentDate)
+  debounce.value = false
+  // this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
+}
+
+const handleNextDate = () => {
+  if (debounce.value) return
+  debounce.value = true
+  offSet.value += 1
+  let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + 1))
+  store.setCurrentDate(currentDate)
+  debounce.value = false
+  // this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
+}
+
+const handleLoadData = () => {
+  if (debounceLoadData.value) return
+  debounceLoadData.value = true
+  /* this.$store
         .dispatch('writeGuestsData', true)
         .then((res) => {
           if (res.length > 0) this.loadGuestsData()
         })
-        .catch((error) => console.log('Error in handleLoadData function: ', error))
-      setTimeout(() => (this.debounceLoadData = false), 5000)
-    }
-  },
-  mounted() {
-    // TODO: maybe I will have to put this in the activated hook
-    // Max offset -10 to +10 days
-    this.offSet = 0
-    // !! No time zone handling
-    // + 2 days, make it a parameter
-    // TODO: Set this beforehand SSR, cause no need to be it on client side
-    // And it will be more clear !
-    let now = new Date()
-    let currentDate = new Date(now.setDate(now.getDate() + 2))
-    this.$store.commit('setCurrentDate', currentDate)
-  }
+        .catch((error) => console.log('Error in handleLoadData function: ', error)) */
+  setTimeout(() => (debounceLoadData.value = false), 5000)
 }
 </script>
+
+<!-- TODO: Add refresh infos !! last update -->

@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
+import Date from './Date.vue'
 import Guests from './Guests.vue'
 import WhatsApp from './WhatsApp.vue'
 import Email from './Email.vue'
@@ -65,7 +66,7 @@ const getTotalDoable = computed(() => {
 <template>
   <div class="grid gap-6 my-8 sm:grid-cols-12">
     <!-- 1 row -->
-    <!-- <date class="col-span-12" :removeBorder="removeBorder" /> -->
+    <date class="col-span-12" :removeBorder="removeBorder" />
     <!-- 2 row -->
     <guests
       class="col-span-12 sm:col-span-6 lg:col-span-3"
