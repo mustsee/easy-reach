@@ -34,7 +34,7 @@ const logOut = () => {
           Easy Reach
         </router-link>
       </div>
-      <div class="flex items-center gap-4">
+      <div v-if="store.user" class="flex items-center gap-4">
         <router-link
           to="/arrivals"
           :class="`w-28 py-1.5 text-center text-sm text-white border border-gray-100 ${isActiveRoute(
