@@ -6,9 +6,9 @@ import Guests from './Guests.vue'
 import WhatsApp from './WhatsApp.vue'
 import Email from './Email.vue'
 import Progression from './Progression.vue'
-/* import SenderName from './SenderName.vue' */
-/* import MessageTypes from './MessageTypes.vue' */
-/* import Status from './Status.vue' */
+import SenderName from './SenderName.vue'
+import MessageTypes from './MessageTypes.vue'
+import Status from './Status.vue'
 
 const props = defineProps(['numberOfGuests', 'bookings'])
 
@@ -94,9 +94,9 @@ const getTotalDoable = computed(() => {
     <!-- 3 row -->
     <!-- <web-whats-app class="col-span-1 sm:col-span-2 grid grid-cols-3 gap-6" :removeBorder="removeBorder" :connected="connected" /> -->
     <!-- <div class="col-span-1 sm:col-span-2 flex flex-col sm:flex-row grid grid-cols-3 gap-6"> -->
-    <!-- <sender-name class="col-span-12 sm:col-span-4" :removeBorder="removeBorder" /> -->
-    <!-- <message-types class="col-span-12 sm:col-span-4" :removeBorder="removeBorder" /> -->
-    <!-- <status class="col-span-12 sm:col-span-4" :removeBorder="removeBorder" /> -->
+    <sender-name class="col-span-12 sm:col-span-4" :removeBorder="false" />
+    <message-types class="col-span-12 sm:col-span-4" :removeBorder="false" />
+    <status class="col-span-12 sm:col-span-4" :removeBorder="false" />
   </div>
 </template>
 

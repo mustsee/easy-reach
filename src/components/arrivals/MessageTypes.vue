@@ -1,19 +1,21 @@
 <template>
-  <div
-    :class="`min-w-0 overflow-hidden ${removeBorder ? '' : 'border-2 border-gray-100'} bg-white`"
-  >
-    <div class="w-full py-4 flex items-center">
-      <div class="flex flex-1 relative text-gray-700 bg-white rounded-sm shadow">
+  <div class="min-w-0 overflow-hidden bg-white">
+    <div class="w-full sm:py-4 flex items-center">
+      <div
+        :class="`flex flex-1 relative text-gray-700 bg-white ${
+          removeBorder ? '' : 'border-2 border-gray-100'
+        }`"
+      >
         <select
-          v-model="type"
+          v-model="store.currentTypeFilter"
           class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
           name="type"
           id="type"
         >
-          <option value="all">All messages</option>
-          <option value="whatsapp">WhatsApp</option>
-          <option value="email">Email</option>
-          <!-- <option value="other">Other</option> -->
+          <option disabled>Message type</option>
+          <option v-for="typeFilter in store.typeFilters" :value="typeFilter.value">
+            {{ typeFilter.displayName }}
+          </option>
         </select>
         <div
           class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-3 text-gray-700"
@@ -27,18 +29,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['removeBorder'],
-  computed: {
-    type: {
-      get() {
-        return this.$store.state.typeFilter
-      },
-      set(newValue) {
-        this.$store.commit('updateTypeFilter', newValue)
-      }
-    }
-  }
-}
+<script setup>
+import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
+
+const store = useArrivalsOptionsStore()
+
+store.setCurrentTypeFilter(store.typeFilters[0].value)
+
+defineProps(['removeBorder'])
 </script>

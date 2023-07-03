@@ -1,19 +1,21 @@
 <template>
-  <div
-    :class="`min-w-0 overflow-hidden ${removeBorder ? '' : 'border-2 border-gray-100'} bg-white`"
-  >
-    <div class="w-full py-4 flex items-center">
-      <div class="flex flex-1 relative text-gray-700 bg-white rounded-sm shadow">
+  <div class="min-w-0 overflow-hidden bg-white">
+    <div class="w-full sm:py-4 flex items-center">
+      <div
+        :class="`flex flex-1 relative text-gray-700 bg-white ${
+          removeBorder ? '' : 'border-2 border-gray-100'
+        }`"
+      >
         <select
-          v-model="status"
+          v-model="store.currentStatus"
           class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
           name="status"
           id="status"
         >
-          <option value="all">All status</option>
-          <option value="todo">To do</option>
-          <option value="done">Done</option>
-          <option value="error">Error</option>
+          <option disabled>Status</option>
+          <option v-for="status in store.statuses" :value="status.value">
+            {{ status.displayName }}
+          </option>
         </select>
         <div
           class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center px-3 text-gray-700"
@@ -27,18 +29,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['removeBorder'],
-  computed: {
-    status: {
-      get() {
-        return this.$store.state.statusFilter
-      },
-      set(newValue) {
-        this.$store.commit('updateStatusFilter', newValue)
-      }
-    }
-  }
-}
+<script setup>
+import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
+
+const store = useArrivalsOptionsStore()
+
+store.setCurrentStatus(store.statuses[0].value)
+
+defineProps(['removeBorder'])
 </script>
