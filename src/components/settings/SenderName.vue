@@ -13,14 +13,14 @@ const deleteSender = async (id) => {
   del('senders', id)
   const senders = await queryByCollection('senders')
   docs.value = senders
-  store.setSenderNames(senders)
+  store.setSenders(senders)
 }
 
 const addSender = async () => {
   add('senders', { name: senderName.value, created_at: Timestamp.now() })
   const senders = await queryByCollection('senders')
   docs.value = senders
-  store.setSenderNames(senders)
+  store.setSenders(senders)
   senderName.value = ''
 }
 </script>

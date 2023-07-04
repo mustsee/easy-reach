@@ -1,3 +1,18 @@
+<script setup>
+import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
+import { queryByCollection } from '../../firebase/firestore'
+
+const store = useArrivalsOptionsStore()
+
+defineProps(['removeBorder'])
+
+let senders = await queryByCollection('senders')
+await store.setSenders(senders.map(sender => sender.name))
+store.setCurrentSender(
+  store.senders.length ? store.senders[0] : ''
+)
+</script>
+
 <template>
   <div class="min-w-0 overflow-hidden bg-white">
     <div class="w-full sm:py-4 flex items-center">
@@ -7,14 +22,14 @@
         }`"
       >
         <select
-          v-model="store.currentSenderName"
+          v-model="store.currentSender"
           class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
           name="senderName"
           id="senderName"
         >
-          <option disabled>Sender name</option>
-          <option v-for="senderName in store.senderNames" :value="senderName">
-            {{ senderName }}
+          <option disabled value="">Sender name</option>
+          <option v-for="sender in store.senders" :value="sender">
+            {{ sender }}
           </option>
         </select>
         <div
@@ -28,13 +43,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
-
-const store = useArrivalsOptionsStore()
-
-store.setCurrentSenderName(store.senderNames[0])
-
-defineProps(['removeBorder'])
-</script>

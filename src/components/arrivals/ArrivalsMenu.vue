@@ -94,7 +94,12 @@ const getTotalDoable = computed(() => {
     <!-- 3 row -->
     <!-- <web-whats-app class="col-span-1 sm:col-span-2 grid grid-cols-3 gap-6" :removeBorder="removeBorder" :connected="connected" /> -->
     <!-- <div class="col-span-1 sm:col-span-2 flex flex-col sm:flex-row grid grid-cols-3 gap-6"> -->
-    <sender-name class="col-span-12 sm:col-span-4" :removeBorder="false" />
+    <Suspense>
+      <sender-name class="col-span-12 sm:col-span-4" :removeBorder="false" />
+      <template #fallback>
+        <div>loading...</div>
+      </template>
+    </Suspense>
     <message-types class="col-span-12 sm:col-span-4" :removeBorder="false" />
     <status class="col-span-12 sm:col-span-4" :removeBorder="false" />
   </div>
