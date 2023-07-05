@@ -34,7 +34,9 @@ import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
 
 const store = useArrivalsOptionsStore()
 
-store.setCurrentTypeFilter(store.typeFilters[0].value)
+if (!store.currentTypeFilter) {
+  store.setCurrentTypeFilter(store.typeFilters[0].value)
+}
 
 defineProps(['removeBorder'])
 </script>

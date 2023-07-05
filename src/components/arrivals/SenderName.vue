@@ -1,14 +1,27 @@
 <script setup>
 import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
+import { useBookingsStore } from '../../stores/BookingsStore';
 import { queryByCollection } from '../../firebase/firestore'
 
 const store = useArrivalsOptionsStore()
+const bookingsStore = useBookingsStore()
 
 defineProps(['removeBorder'])
 
 let senders = await queryByCollection('senders', 'created_at')
 await store.setSenders(senders.map((sender) => sender.name))
-store.setCurrentSender(store.senders.length ? store.senders[0] : '')
+
+// Coming from /settings page, don't set again currentSender and lastSender if already set
+if (store.senders.length && !store.currentSender) {
+  store.setCurrentSender(store.senders[0])
+  store.setLastSender(store.senders[0])
+}
+
+store.$subscribe((mutation, state) => {
+  if (mutation.events.key === 'currentSender') {
+    bookingsStore.setSenderName(state.currentSender)
+  }
+})
 </script>
 
 <template>

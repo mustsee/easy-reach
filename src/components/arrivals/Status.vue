@@ -34,7 +34,10 @@ import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
 
 const store = useArrivalsOptionsStore()
 
-store.setCurrentStatus(store.statuses[0].value)
+// To initiliaze, and not relaunch coming from /settings page
+if (!store.currentStatus) {
+  store.setCurrentStatus(store.statuses[0].value)
+}
 
 defineProps(['removeBorder'])
 </script>

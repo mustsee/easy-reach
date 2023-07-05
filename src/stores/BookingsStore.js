@@ -2,15 +2,17 @@ import { defineStore } from 'pinia'
 import { functionBaseURL } from './../firebase/setup'
 import { useDateStore } from './DateStore'
 import { useMessagesStore } from './MessagesStore'
+import { useArrivalsOptionsStore } from './ArrivalsOptionsStore'
 
 import { queryByCollection } from '../firebase/firestore'
 
 const dateStore = useDateStore()
 const messagesStore = useMessagesStore()
+const ArrivalsOptionsStore = useArrivalsOptionsStore()
 
 export const useBookingsStore = defineStore('bookings', {
   state: () => ({
-    bookings: null
+    bookings: null,
   }),
   getters: {
     getBookings(state) {
@@ -24,7 +26,12 @@ export const useBookingsStore = defineStore('bookings', {
       return 0
     },
     filteredBookings() {
-      return this.getBookings
+      const typeFilter = ArrivalsOptionsStore.currentTypeFilter
+      const statusFilter = ArrivalsOptionsStore.currentStatus
+      let res = this.getBookings
+      if (typeFilter !== 'all') res = res.filter(booking => booking.type === typeFilter)
+      if (statusFilter !== 'all') res = res.filter(booking => booking.status === statusFilter)
+      return res
     }
   },
   actions: {
@@ -42,9 +49,10 @@ export const useBookingsStore = defineStore('bookings', {
             (message) => message.messageType === messageType
           )
           const { text, variables } = message
+          const senderName = ArrivalsOptionsStore.currentSender
           let modifiedText = text
           for (const variable of variables) {
-            let replaceBy = booking[variable] ? booking[variable] : `--${variable}--`
+            let replaceBy = booking[variable] ? booking[variable] : variable === 'senderName' ? senderName : `--${variable}--`
             modifiedText = modifiedText.replace(`--${variable}--`, replaceBy)
           }
           booking.text = modifiedText
@@ -68,6 +76,26 @@ export const useBookingsStore = defineStore('bookings', {
         [dateStore.apiDate]: updatedBookings
       }
     },
+    setSenderName(senderName) {
+      let updatedBookings = this.bookings[dateStore.apiDate].map((booking) => {
+        const lastSenderName = ArrivalsOptionsStore.lastSender
+        const { text } = booking
+        let hasSenderNameKey = text.search("--senderName--");
+        let updatedText;
+        if (hasSenderNameKey !== -1) {
+          updatedText = text.replace("--senderName--", senderName);
+        } else {
+          updatedText = text.replace(lastSenderName, senderName);
+        }
+        booking.text = updatedText
+        return booking
+      });
+      this.bookings = {
+        ...this.bookings,
+        [dateStore.apiDate]: updatedBookings
+      }
+      ArrivalsOptionsStore.setLastSender(senderName)
+    },
     /**********************
      **** ASYNC ACTIONS ****
      **********************/
@@ -86,7 +114,6 @@ export const useBookingsStore = defineStore('bookings', {
       }
     },
     async loadGuestsData() {
-      console.log('loadGuestsData')
       try {
         const res = await queryByCollection(`guests/${dateStore.apiDate}/bookings`, 'guestName')
         this.bookings = {

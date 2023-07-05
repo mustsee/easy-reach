@@ -4,6 +4,7 @@ export const useArrivalsOptionsStore = defineStore('arrivalsOptions', {
   state: () => ({
     senders: [],
     currentSender: '',
+    lastSender: '',
     typeFilters: [
       { value: 'all', displayName: 'All messages' },
       { value: 'whatsapp', displayName: 'WhatsApp' },
@@ -25,6 +26,9 @@ export const useArrivalsOptionsStore = defineStore('arrivalsOptions', {
     },
     setCurrentSender(value) {
       this.currentSender = value
+    },
+    setLastSender(value) {
+      this.lastSender = value
     },
     setCurrentTypeFilter(value) {
       this.currentTypeFilter = value
