@@ -24,4 +24,9 @@ if (import.meta.env.MODE !== 'production') {
   connectAuthEmulator(getAuth(), 'http://localhost:9099')
 }
 
-export { firebaseApp, firestoreDb }
+const functionBaseURL =
+  import.meta.env.MODE !== 'production'
+    ? 'http://localhost:5001/easy-reach-1f358/us-central1/'
+    : 'https://us-central1-easy-reach-1f358.cloudfunctions.net/'
+
+export { firebaseApp, firestoreDb, functionBaseURL }

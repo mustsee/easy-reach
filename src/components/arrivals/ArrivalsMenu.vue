@@ -56,8 +56,8 @@ const getProgression = computed(() => {
   return 0
 })
 const getTotalDoable = computed(() => {
-  if (props.bookings.length) {
-    return getEmailTotal + getWhatsAppTotal
+  if (props.bookings) {
+    return getEmailTotal.value + getWhatsAppTotal.value
   }
   return 0
 })

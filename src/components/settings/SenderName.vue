@@ -7,7 +7,7 @@ import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
 const store = useArrivalsOptionsStore()
 
 const senderName = ref('')
-const docs = ref(await queryByCollection('senders'))
+const docs = ref(await queryByCollection('senders', 'created_at'))
 
 const deleteSender = async (id) => {
   del('senders', id)
@@ -50,7 +50,7 @@ const addSender = async () => {
     <input
       v-model="senderName"
       type="text"
-      placeholder="Add new sender name"
+      placeholder="Add sender name"
       class="py-2 px-4 border border-gray-200 rounded focus:shadow-md focus:outline-none"
     />
     <button

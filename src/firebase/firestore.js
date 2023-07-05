@@ -15,11 +15,13 @@ import {
 } from 'firebase/firestore'
 import { firestoreDb } from './setup'
 
-export const queryByCollection = async (col) => {
-  const q = query(
-    collection(firestoreDb, col),
-    orderBy("created_at")
-  );
+export const queryByCollection = async (col, order = null) => {
+  let q
+  if (!order) {
+    q = query(collection(firestoreDb, col))
+  } else {
+    q = query(collection(firestoreDb, col), orderBy(order))
+  }
 
   const snapshot = await getDocs(q)
 
