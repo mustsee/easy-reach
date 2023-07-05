@@ -18,6 +18,7 @@ if (store.senders.length && !store.currentSender) {
 }
 
 store.$subscribe((mutation, state) => {
+  // The bug fix works but it fires a lot !
   // if (mutation.events.key === 'currentSender') {
     bookingsStore.setSenderName(state.currentSender)
   //}
