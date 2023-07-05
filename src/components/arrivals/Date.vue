@@ -79,8 +79,11 @@ const debounce = ref(false)
 const debounceLoadData = ref(false)
 
 let now = new Date()
-let currentDate = new Date(now.setDate(now.getDate() + 2))
-store.setCurrentDate(currentDate)
+if (!store.currentDate) {
+  let currentDate = new Date(now.setDate(now.getDate() + 2))
+  store.setCurrentDate(currentDate)
+}
+
 
 const handlePreviousDate = () => {
   if (debounce.value) return
