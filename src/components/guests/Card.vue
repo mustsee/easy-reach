@@ -39,13 +39,17 @@
         v-if="booking.status === 'todo'"
         class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
       >
-        <!-- <select-component @selectChange="handleSelectType" :type="type" :messages="messages" :index="index" /> -->
-        <!-- <textarea-component @textChange="handleTextChange" :text="text" class="mt-6" /> -->
+        <select-component :bookId="booking.bookId" :messageType="booking.messageType" />
+        <textarea-component
+          :bookId="booking.bookId"
+          :text="booking.text"
+          class="mt-6"
+        />
         <div class="mt-8">
           <div
             v-if="booking.type === 'email'"
             class="action-button rounded-md shadow cursor-pointer"
-            @click="sendEmail(bookId)"
+            @click="sendEmail(booking.id)"
             :class="[
               'flex items-center justify-center w-full px-5 py-3 text-base font-medium text-red-600 border border-red-600 bg-white rounded-md hover:bg-red-200 transition-all'
             ]"
@@ -150,14 +154,23 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useBookingsStore } from '../../stores/BookingsStore'
 
-const props = defineProps(['booking', 'messages', 'index'])
+import SelectComponent from './SelectComponent.vue'
+import TextareaComponent from './TextareaComponent.vue'
+
+const bookingsStore = useBookingsStore()
+
+const props = defineProps(['booking'])
+
+onMounted(() => {
+  bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
+})
 
 const getWhatsAppLink = computed(() => {
   // https://web.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext
-  // let encodedText = encodeURI(this.text) // TODO: Change that
-  let encodedText = encodeURI('asd')
+  let encodedText = encodeURI(props.booking.text) // TODO: Change that
   return `https://web.whatsapp.com/send?phone=${props.booking.phone}&text=${encodedText}`
 })
 

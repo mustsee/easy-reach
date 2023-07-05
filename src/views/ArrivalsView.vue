@@ -7,13 +7,13 @@ import GuestCard from './../components/guests/Card.vue'
 const store = useBookingsStore()
 
 onMounted(() => {
-  loadData()
+  if (!store.getBookings) { // When we come /settings page, don't load data a second time
+    loadData()
+  }
 })
 
 const debounceLoadData = ref(false)
 const debounce = ref(false)
-
-const getMessages = []
 
 const writeData = () => {
   if (debounceLoadData.value) return
@@ -61,11 +61,8 @@ const loadData = () => {
   </div>
   <div v-else>
     <guest-card
-      v-for="(booking, index) in store.filteredBookings"
-      :key="index"
+      v-for="(booking) in store.filteredBookings"
       :booking="booking"
-      :messages="getMessages"
-      :index="index"
     />
   </div>
 </template>

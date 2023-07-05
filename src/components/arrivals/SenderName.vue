@@ -7,10 +7,8 @@ const store = useArrivalsOptionsStore()
 defineProps(['removeBorder'])
 
 let senders = await queryByCollection('senders', 'created_at')
-await store.setSenders(senders.map(sender => sender.name))
-store.setCurrentSender(
-  store.senders.length ? store.senders[0] : ''
-)
+await store.setSenders(senders.map((sender) => sender.name))
+store.setCurrentSender(store.senders.length ? store.senders[0] : '')
 </script>
 
 <template>

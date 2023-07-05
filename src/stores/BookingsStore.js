@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia'
 import { functionBaseURL } from './../firebase/setup'
 import { useDateStore } from './DateStore'
+import { useMessagesStore } from './MessagesStore'
+
 import { queryByCollection } from '../firebase/firestore'
 
 const dateStore = useDateStore()
+const messagesStore = useMessagesStore()
 
 export const useBookingsStore = defineStore('bookings', {
   state: () => ({
@@ -25,6 +28,46 @@ export const useBookingsStore = defineStore('bookings', {
     }
   },
   actions: {
+    setMessage(bookId, messageType) {
+      /* Modify : messageType, type, text */
+      let updatedBookings = this.bookings[dateStore.apiDate].map((booking) => {
+        if (booking.bookId === bookId) {
+          booking.messageType = messageType
+          if (messageType === 'emailMessage') {
+            booking.type = 'email'
+          } else if (!(messageType === 'other')) {
+            booking.type = 'whatsapp'
+          }
+          const message = messagesStore.messages.find(
+            (message) => message.messageType === messageType
+          )
+          const { text, variables } = message
+          let modifiedText = text
+          for (const variable of variables) {
+            let replaceBy = booking[variable] ? booking[variable] : `--${variable}--`
+            modifiedText = modifiedText.replace(`--${variable}--`, replaceBy)
+          }
+          booking.text = modifiedText
+        }
+        return booking
+      })
+      this.bookings = {
+        ...this.bookings,
+        [dateStore.apiDate]: updatedBookings
+      }
+    },
+    setCurrentText(bookId, text) {
+      let updatedBookings = this.bookings[dateStore.apiDate].map((booking) => {
+        if (booking.bookId === bookId) {
+          booking.text = text
+        }
+        return booking
+      })
+      this.bookings = {
+        ...this.bookings,
+        [dateStore.apiDate]: updatedBookings
+      }
+    },
     /**********************
      **** ASYNC ACTIONS ****
      **********************/
@@ -43,6 +86,7 @@ export const useBookingsStore = defineStore('bookings', {
       }
     },
     async loadGuestsData() {
+      console.log('loadGuestsData')
       try {
         const res = await queryByCollection(`guests/${dateStore.apiDate}/bookings`, 'guestName')
         this.bookings = {
