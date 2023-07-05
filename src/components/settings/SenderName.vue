@@ -18,7 +18,7 @@ const deleteSender = async (id) => {
 
 const addSender = async () => {
   add('senders', { name: senderName.value, created_at: Timestamp.now() })
-  const senders = await queryByCollection('senders')
+  const senders = await queryByCollection('senders', 'created_at')
   docs.value = senders
   store.setSenders(senders)
   senderName.value = ''

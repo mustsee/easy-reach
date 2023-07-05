@@ -18,9 +18,9 @@ if (store.senders.length && !store.currentSender) {
 }
 
 store.$subscribe((mutation, state) => {
-  if (mutation.events.key === 'currentSender') {
+  // if (mutation.events.key === 'currentSender') {
     bookingsStore.setSenderName(state.currentSender)
-  }
+  //}
 })
 </script>
 
