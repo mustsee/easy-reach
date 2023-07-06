@@ -43,7 +43,7 @@ const handleSaveArrivalTime = async () => {
   try {
     await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value )
   } finally {
-    arrivalTimeText.value = false
+    // arrivalTimeText.value = ''
     displayInput.value = false
   }
 }
