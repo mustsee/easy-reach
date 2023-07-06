@@ -32,12 +32,17 @@ const logOut = () => {
   <header class="border-b border-gray-200 bg-gray-900">
     <div class="max-w-screen-xl flex justify-between mx-auto px-6 xl:px-0">
       <div class="logo flex items-center">
-        <router-link
+        <div
+          class="truncate text-white font-medium border-l-4 border-gray-500 transition hover:text-gray-100 my-4 px-3 py-1"
+        >
+          Easy Reach
+        </div>
+        <!-- <router-link
           to="/"
           class="truncate text-white font-medium border-l-4 border-gray-500 transition hover:text-gray-100 my-4 px-3 py-1"
         >
           Easy Reach
-        </router-link>
+        </router-link> -->
       </div>
       <div v-if="store.user && isNotHomepage" class="flex items-center gap-4">
         <router-link

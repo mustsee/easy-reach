@@ -1,8 +1,7 @@
 <script setup>
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, signOut, getAuth } from 'firebase/auth'
 import router from '@/router'
 import { useUserStore } from '../stores/UserStore'
-import { getAuth } from 'firebase/auth'
 import { isUserAuthorized } from '../firebase/firestore'
 
 const store = useUserStore()

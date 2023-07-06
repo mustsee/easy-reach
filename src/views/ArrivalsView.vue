@@ -21,7 +21,6 @@ const writeData = () => {
   store
     .writeGuestsData()
     .then((res) => {
-      console.log(res)
       if (res.length > 0) loadData()
     })
     .catch((error) => console.log('Error in writeData function: ', error))

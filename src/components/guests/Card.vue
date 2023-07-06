@@ -165,7 +165,7 @@ const bookingsStore = useBookingsStore()
 const props = defineProps(['booking'])
 
 onMounted(() => {
-  bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
+  // bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
 })
 
 const getWhatsAppLink = computed(() => {
@@ -190,7 +190,7 @@ const sendEmail = (bookId) => {
 }
 
 const updateBookingStatus = (bookId, status) => {
-  //this.$store.dispatch('updateCardStatus', { bookId, status })
+  bookingsStore.updateCardStatus(bookId, status)
 }
 </script>
 
@@ -204,27 +204,7 @@ export default {
     messageType() {
       return this.booking.messageType
     },
-    text() {
-      const { cardsInfos } = this.$store.state
-      const { bookId } = this
-      if (cardsInfos[bookId]) return cardsInfos[bookId]['text']
-      return ''
-    },
-    type() {
-      const { cardsInfos } = this.$store.state
-      const { bookId } = this
-      if (cardsInfos[bookId]) return cardsInfos[bookId]['type']
-      return ''
-    },
-    getWhatsAppLink() {
-      // There might be some reservations without phone numbers
-      if (this.booking['phone']) {
-        // https://web.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext
-        let encodedText = encodeURI(this.text)
-        return `https://web.whatsapp.com/send?phone=${this.booking.phone}&text=${encodedText}`
-      }
-      return 'https://web.whatsapp.com/'
-    }
+   
   },
   methods: {
     /*  ...mapActions({
@@ -233,20 +213,7 @@ export default {
       updateBeds24ArrivalTimeSection: 'updateBeds24ArrivalTimeSection',
       sendMailNodeMailer: 'sendMailNodeMailer', // Naming is not good
     }), */
-    handleSelectType(value) {
-      this.computeCardInfos(value)
-    },
-    handleTextChange(text) {
-      this.$store.commit('setCardText', { bookId: this.bookId, text })
-    },
-    computeCardInfos(messageType) {
-      const { bookId, messages, booking } = this
-      const { text, type, variables } = messages.filter(
-        (message) => message.type === messageType
-      )[0]
-      this.$store.commit('setCardInfos', { bookId, text, type, variables })
-      this.$store.dispatch('setVariablesInText', { booking })
-    },
+  
     updateBookingStatus(bookId, status) {
       //this.$store.dispatch('updateCardStatus', { bookId, status })
     },
@@ -272,9 +239,6 @@ export default {
         }
       }) */
     }
-  },
-  mounted() {
-    this.computeCardInfos(this.messageType)
   }
 }
 </script> -->

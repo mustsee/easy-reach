@@ -66,10 +66,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useDateStore } from '../../stores/DateStore'
+import { useBookingsStore } from '../../stores/BookingsStore'
 
 defineProps(['removeBorder'])
 
 const store = useDateStore()
+const bookingsStore = useBookingsStore()
 
 const offSet = ref(0)
 const minOffSet = -10
@@ -84,15 +86,13 @@ if (!store.currentDate) {
   store.setCurrentDate(currentDate)
 }
 
-
 const handlePreviousDate = () => {
   if (debounce.value) return
   debounce.value = true
   offSet.value -= 1
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() - 1))
   store.setCurrentDate(currentDate)
-  debounce.value = false
-  // this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
+  bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
 
 const handleNextDate = () => {
@@ -101,19 +101,18 @@ const handleNextDate = () => {
   offSet.value += 1
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + 1))
   store.setCurrentDate(currentDate)
-  debounce.value = false
-  // this.$store.dispatch('loadGuestsData').finally(() => (this.debounce = false))
+  bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
 
 const handleLoadData = () => {
   if (debounceLoadData.value) return
   debounceLoadData.value = true
-  /* this.$store
-        .dispatch('writeGuestsData', true)
-        .then((res) => {
-          if (res.length > 0) this.loadGuestsData()
-        })
-        .catch((error) => console.log('Error in handleLoadData function: ', error)) */
+  bookingsStore
+    .writeGuestsData(true)
+    .then((res) => {
+      if (res.length > 0) bookingsStore.loadGuestsData()
+    })
+    .catch((error) => console.log('Error in handleLoadData function: ', error))
   setTimeout(() => (debounceLoadData.value = false), 5000)
 }
 </script>

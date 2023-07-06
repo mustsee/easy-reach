@@ -12,10 +12,11 @@ let senders = await queryByCollection('senders', 'created_at')
 await store.setSenders(senders.map((sender) => sender.name))
 
 // Coming from /settings page, don't set again currentSender and lastSender if already set
-if (store.senders.length && !store.currentSender) {
+// Buggy...
+/* if (store.senders.length && !store.currentSender) {
   store.setCurrentSender(store.senders[0])
   store.setLastSender(store.senders[0])
-}
+} */
 
 store.$subscribe((mutation, state) => {
   // The bug fix works but it fires a lot !
