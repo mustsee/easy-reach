@@ -66,6 +66,17 @@ export const useBookingsStore = defineStore('bookings', {
         }
         return booking
       })
+      // Keep in sync store and firebase, if not, bugs when cancel actions, etc...
+      // Surely can do better
+      set(`guests/${dateStore.apiDate}/bookings/${bookId}`, {
+        messageType,
+        type:
+          messageType === 'emailMessage'
+            ? 'email'
+            : !(messageType === 'other')
+            ? 'whatsapp'
+            : 'other'
+      })
       this.bookings = {
         ...this.bookings,
         [dateStore.apiDate]: updatedBookings
@@ -119,8 +130,8 @@ export const useBookingsStore = defineStore('bookings', {
 
     async writeGuestsData(dataUpdate = false) {
       try {
-        let url = 'getArrivals?date=' + dateStore.apiDate + (dataUpdate ? '&updateData=true' : '')
-        let response = await fetch(functionBaseURL + url)
+        const url = 'getArrivals?date=' + dateStore.apiDate + (dataUpdate ? '&updateData=true' : '')
+        const response = await fetch(functionBaseURL + url)
         const res = await response.json()
         if (res.success) {
           // dispatch('dataLastUpdate')
@@ -149,32 +160,45 @@ export const useBookingsStore = defineStore('bookings', {
         await set(`guests/${dateStore.apiDate}/bookings/${bookId}`, value)
         this.loadGuestsData()
       } catch (error) {
-        console.log('Error while updating card status: ', error)
+        console.log('Error while updating booking: ', error)
       }
     },
     async updateArrivalTimeSection(bookId, previousArrivalTimeText, type) {
-      console.log('type', type)
       try {
-        let url =
+        const url =
           'updateBeds24ArrivalTimeSection?bookId=' +
           bookId +
           '&previousArrivalTimeText=' +
           previousArrivalTimeText +
           '&type=' +
           type
-        let response = await fetch(functionBaseURL + url)
+        const response = await fetch(functionBaseURL + url)
         const res = await response.json()
         if (res.success) {
           // Update store and firebase / Don't overcharge Beds24 API
-          try {
-            await set(`guests/${dateStore.apiDate}/bookings/${bookId}`, { arrivalTime: res.text })
+          this.updateBooking(bookId, { arrivalTime: res.text })
+          /* try {
+            await set(`guests/${dateStore.apiDate}/bookings/${bookId}`, )
             this.loadGuestsData()
           } catch (error) {
             console.log('Error while updating card arrival time: ', error)
-          }
+          } */
         }
       } catch (error) {
         console.log('Error in updateBeds24ArrivalTimeSection: ', error)
+      }
+    },
+    async sendEmail(booking) {
+      try {
+        const url =
+          'sendEmail?guestEmail=' + booking.email + '&text=' + JSON.stringify(booking.text)
+        const response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        this.updateBooking(booking.bookId, { status: 'done' })
+        this.updateArrivalTimeSection(booking.bookId, booking.arrivalTime, booking.type)
+      } catch (error) {
+        this.updateBooking(booking.bookId, { status: 'error' })
+        console.log('Error in sendEmail: ', error)
       }
     }
   }

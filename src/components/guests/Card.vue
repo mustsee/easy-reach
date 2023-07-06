@@ -45,7 +45,7 @@
           <div
             v-if="booking.type === 'email'"
             class="action-button rounded-md shadow cursor-pointer"
-            @click="sendEmail(booking.id)"
+            @click="sendEmail(booking)"
             :class="[
               'flex items-center justify-center w-full px-5 py-3 text-base font-medium text-red-600 border border-red-600 bg-white rounded-md hover:bg-red-200 transition-all'
             ]"
@@ -240,79 +240,19 @@ const getWhatsAppLink = computed(() => {
   return `https://web.whatsapp.com/send?phone=${props.booking.phone}&text=${encodedText}`
 })
 
-const sendEmail = (bookId) => {
-  const guestEmail = this.booking.email
-  const text = JSON.stringify(this.text)
-  /* this.$store.dispatch('sendMailNodeMailer', { guestEmail, text }).then((res) => {
-    if (res.success) {
-      // DEV
-      // this.updateBooking(bookId, 'done')
-      // PROD
-      this.updateArrivalTimeSection(bookId, 'done')
-    } else {
-      this.updateBooking(bookId, 'error')
-    }
-  }) */
+const sendEmail = (booking) => {
+  bookingsStore.sendEmail(booking)
 }
 
 const updateBooking = (bookId, value) => {
   bookingsStore.updateBooking(bookId, value)
 }
 
-const updateArrivalTimeSection = (booking, status) => {
-  bookingsStore.updateBooking(booking.bookId, status)
+const updateArrivalTimeSection = (booking, value) => {
+  bookingsStore.updateBooking(booking.bookId, value)
   bookingsStore.updateArrivalTimeSection(booking.bookId, booking.arrivalTime, booking.type)
 }
 </script>
-
-<!-- <script>
-export default {
-  props: ['booking', 'messages', 'index'],
-  computed: {
-    bookId() {
-      return this.booking.bookId
-    },
-    messageType() {
-      return this.booking.messageType
-    },
-   
-  },
-  methods: {
-    /*  ...mapActions({
-      updateBooking: 'updateBooking',
-      updateCardStatusAndType: 'updateCardStatusAndType',
-      updateBeds24ArrivalTimeSection: 'updateBeds24ArrivalTimeSection',
-      sendMailNodeMailer: 'sendMailNodeMailer', // Naming is not good
-    }), */
-  
-    updateBooking(bookId, status) {
-      //this.$store.dispatch('updateBooking', { bookId, status })
-    },
-    async updateBookingStatusAndType(bookId, status, type, messageType) {
-      // await this.$store.dispatch('updateCardStatusAndType', { bookId, status, type, messageType })
-      this.computeCardInfos('emailMessage')
-    },
-    updateArrivalTimeSection(bookId, status) {
-      this.updateBooking(bookId, status)
-      // this.$store.dispatch('updateBeds24ArrivalTimeSection', { bookId, previousArrivalTimeText: this.booking.arrivalTime, type: this.type })
-    },
-    sendEmail(bookId) {
-      const guestEmail = this.booking.email
-      const text = JSON.stringify(this.text)
-      /* this.$store.dispatch('sendMailNodeMailer', { guestEmail, text }).then(res => {
-        if (res.success) {
-          // DEV
-          // this.updateBooking(bookId, 'done')
-          // PROD
-          this.updateArrivalTimeSection(bookId, 'done')
-        } else {
-          this.updateBooking(bookId, 'error')
-        }
-      }) */
-    }
-  }
-}
-</script> -->
 
 <style>
 /* https://codepen.io/stackdiary/pen/xxPRLjV */

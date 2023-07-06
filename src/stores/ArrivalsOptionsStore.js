@@ -14,7 +14,7 @@ export const useArrivalsOptionsStore = defineStore('arrivalsOptions', {
     statuses: [
       { value: 'all', displayName: 'All statuses' },
       { value: 'todo', displayName: 'To do' },
-      { value: 'inProgress', displayName: 'In progress' }, // Remove afterwards
+      // { value: 'inProgress', displayName: 'In progress' }, // Remove afterwards
       { value: 'done', displayName: 'Done' },
       { value: 'error', displayName: 'Error' }
     ],
