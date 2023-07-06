@@ -1,3 +1,58 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import { useBookingsStore } from '../../stores/BookingsStore'
+import { useMessagesStore } from '../../stores/MessagesStore'
+
+import SelectComponent from './SelectComponent.vue'
+import TextareaComponent from './TextareaComponent.vue'
+
+const bookingsStore = useBookingsStore()
+const messagesStore = useMessagesStore()
+
+const props = defineProps(['booking'])
+
+onMounted(() => {
+  // bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
+})
+
+const getWhatsAppLink = computed(() => {
+  // https://web.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext
+  let encodedText = encodeURI(props.booking.text) // TODO: Change that
+  return `https://web.whatsapp.com/send?phone=${props.booking.phone}&text=${encodedText}`
+})
+
+const sendEmail = (booking) => {
+  bookingsStore.sendEmail(booking)
+}
+
+const updateBooking = (bookId, value) => {
+  bookingsStore.updateBooking(bookId, value)
+}
+
+const updateArrivalTimeSection = (booking, value) => {
+  // updateBooking call two times ? A second time in updateArrivalTimeSection
+  bookingsStore.updateBooking(booking.bookId, value)
+  bookingsStore.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
+}
+
+const displayInput = ref(false)
+const arrivalTimeText = ref(props.booking.arrivalTime)
+
+const handleSaveArrivalTime = async () => {
+  // bookingsStore.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
+  try {
+    await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value )
+  } finally {
+    arrivalTimeText.value = false
+    displayInput.value = false
+  }
+}
+</script>
+
+<style>
+/* https://codepen.io/stackdiary/pen/xxPRLjV */
+</style>
+
 <template>
   <div class="pb-6">
     <div class="shadow-md lg:flex">
@@ -18,9 +73,44 @@
           <!-- <ul class="mt-8 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-5"> -->
           <ul class="mt-8 space-y-5">
             <li class="lg:col-span-1">
-              <p class="text-gray-900">Arrival time</p>
-              <p class="text-sm text-gray-700">
+              <div class="flex items-center">
+                <p class="text-gray-900">Arrival time</p>
+                <div v-if="!displayInput">
+                  <img
+                    @click="displayInput = true"
+                    src="/edit.svg"
+                    alt="Edit icon"
+                    class="ml-2 h-3 w-3 cursor-pointer"
+                    title="Edit Arrival time section in Beds24"
+                  />
+                </div>
+              </div>
+              <p v-if="!displayInput" class="text-sm text-gray-700">
                 {{ booking.arrivalTime ? booking.arrivalTime : 'No data' }}
+              </p>
+              <p v-else>
+                <input
+                  v-model="arrivalTimeText"
+                  type="text"
+                  spellcheck="false"
+                  placeholder="Update Arrival time text"
+                  class="mt-2 text-sm px-4 py-1 border border-gray-200 rounded-sm focus:shadow-md focus:outline-none mb-2"
+                />
+                <div class="flex gap-4">
+                  <button
+                  @click="handleSaveArrivalTime"
+                  class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+                >
+                  Save
+                </button>
+                <button
+                  @click="displayInput = false"
+                  class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+                >
+                  Cancel
+                </button>
+                </div>
+               
               </p>
             </li>
             <li class="lg:col-span-1">
@@ -216,44 +306,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { computed, onMounted } from 'vue'
-import { useBookingsStore } from '../../stores/BookingsStore'
-import { useMessagesStore } from '../../stores/MessagesStore'
-
-import SelectComponent from './SelectComponent.vue'
-import TextareaComponent from './TextareaComponent.vue'
-
-const bookingsStore = useBookingsStore()
-const messagesStore = useMessagesStore()
-
-const props = defineProps(['booking'])
-
-onMounted(() => {
-  // bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
-})
-
-const getWhatsAppLink = computed(() => {
-  // https://web.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext
-  let encodedText = encodeURI(props.booking.text) // TODO: Change that
-  return `https://web.whatsapp.com/send?phone=${props.booking.phone}&text=${encodedText}`
-})
-
-const sendEmail = (booking) => {
-  bookingsStore.sendEmail(booking)
-}
-
-const updateBooking = (bookId, value) => {
-  bookingsStore.updateBooking(bookId, value)
-}
-
-const updateArrivalTimeSection = (booking, value) => {
-  bookingsStore.updateBooking(booking.bookId, value)
-  bookingsStore.updateArrivalTimeSection(booking.bookId, booking.arrivalTime, booking.type)
-}
-</script>
-
-<style>
-/* https://codepen.io/stackdiary/pen/xxPRLjV */
-</style>

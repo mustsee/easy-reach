@@ -163,7 +163,21 @@ export const useBookingsStore = defineStore('bookings', {
         console.log('Error while updating booking: ', error)
       }
     },
-    async updateArrivalTimeSection(bookId, previousArrivalTimeText, type) {
+    async updateArrivalTimeSectionEdit(bookId, arrivalTimeText) {
+      try {
+        const url =
+          'updateArrivalTimeSectionEdit?bookId=' + bookId + '&arrivalTimeText=' + arrivalTimeText
+        const response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        if (res.success) {
+          await this.updateBooking(bookId, { arrivalTime: res.text })
+          return { success: true }
+        }
+      } catch (error) {
+        console.log('Error in updateArrivalTimeSectionEdit: ', error)
+      }
+    },
+    async updateArrivalTimeSection(bookId, type, previousArrivalTimeText) {
       try {
         const url =
           'updateBeds24ArrivalTimeSection?bookId=' +
@@ -185,7 +199,7 @@ export const useBookingsStore = defineStore('bookings', {
           } */
         }
       } catch (error) {
-        console.log('Error in updateBeds24ArrivalTimeSection: ', error)
+        console.log('Error in updateArrivalTimeSection: ', error)
       }
     },
     async sendEmail(booking) {
@@ -195,7 +209,7 @@ export const useBookingsStore = defineStore('bookings', {
         const response = await fetch(functionBaseURL + url)
         const res = await response.json()
         this.updateBooking(booking.bookId, { status: 'done' })
-        this.updateArrivalTimeSection(booking.bookId, booking.arrivalTime, booking.type)
+        this.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
       } catch (error) {
         this.updateBooking(booking.bookId, { status: 'error' })
         console.log('Error in sendEmail: ', error)
