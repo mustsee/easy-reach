@@ -36,7 +36,7 @@ export const queryByCollection = async (col, order = null) => {
 }
 
 export const set = async (col, document) => {
-  await setDoc(doc(collection(firestoreDb, col)), document, { merge: true })
+  await setDoc(doc(firestoreDb, col), document, { merge: true })
 }
 
 export const add = async (col, document) => {

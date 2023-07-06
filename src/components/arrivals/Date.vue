@@ -28,7 +28,10 @@
           <!-- Find where is the best to put this button -->
           <span
             @click="handleLoadData"
-            :class="[!debounceLoadData ? '' : 'pointer-events-none opacity-50']"
+            :class="[
+              bookingsStore.getNumberOfGuests ? '' : 'pointer-events-none opacity-50',
+              !debounceLoadData ? '' : 'pointer-events-none opacity-50'
+            ]"
           >
             <svg
               fill="currentColor"

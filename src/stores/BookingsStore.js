@@ -4,7 +4,7 @@ import { useDateStore } from './DateStore'
 import { useMessagesStore } from './MessagesStore'
 import { useArrivalsOptionsStore } from './ArrivalsOptionsStore'
 
-import { queryByCollection } from '../firebase/firestore'
+import { queryByCollection, set } from '../firebase/firestore'
 
 const dateStore = useDateStore()
 const messagesStore = useMessagesStore()
@@ -103,6 +103,16 @@ export const useBookingsStore = defineStore('bookings', {
       }
       ArrivalsOptionsStore.setLastSender(senderName)
     },
+    // helper function
+    replaceVariablesInText(booking, message) {
+      const { text, variables } = message
+      let modifiedText = text
+      for (const variable of variables) {
+        let replaceBy = booking[variable] ? booking[variable] : `--${variable}--`
+        modifiedText = modifiedText.replace(`--${variable}--`, replaceBy)
+      }
+      return modifiedText
+    },
     /**********************
      **** ASYNC ACTIONS ****
      **********************/
@@ -134,6 +144,38 @@ export const useBookingsStore = defineStore('bookings', {
         console.log('Error in loadGuestsData: ', e)
       }
     },
-    async updateCardStatus(bookId, status) {}
+    async updateBooking(bookId, value) {
+      try {
+        await set(`guests/${dateStore.apiDate}/bookings/${bookId}`, value)
+        this.loadGuestsData()
+      } catch (error) {
+        console.log('Error while updating card status: ', error)
+      }
+    },
+    async updateArrivalTimeSection(bookId, previousArrivalTimeText, type) {
+      console.log('type', type)
+      try {
+        let url =
+          'updateBeds24ArrivalTimeSection?bookId=' +
+          bookId +
+          '&previousArrivalTimeText=' +
+          previousArrivalTimeText +
+          '&type=' +
+          type
+        let response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        if (res.success) {
+          // Update store and firebase / Don't overcharge Beds24 API
+          try {
+            await set(`guests/${dateStore.apiDate}/bookings/${bookId}`, { arrivalTime: res.text })
+            this.loadGuestsData()
+          } catch (error) {
+            console.log('Error while updating card arrival time: ', error)
+          }
+        }
+      } catch (error) {
+        console.log('Error in updateBeds24ArrivalTimeSection: ', error)
+      }
+    }
   }
 })
