@@ -35,7 +35,8 @@ const logOut = () => {
         <div
           class="truncate text-white font-medium border-l-4 border-gray-500 transition hover:text-gray-100 my-4 px-3 py-1"
         >
-          Easy Reach
+          <span class="sm:hidden"> ER </span>
+          <span class="hidden sm:block">Easy Reach</span>
         </div>
         <!-- <router-link
           to="/"
@@ -47,14 +48,14 @@ const logOut = () => {
       <div v-if="store.user && isNotHomepage" class="flex items-center gap-4">
         <router-link
           to="/arrivals"
-          :class="`w-28 py-1.5 text-center text-sm text-white border border-gray-100 ${isActiveRoute(
+          :class="`sm:w-28 py-1.5 px-2 text-center text-sm text-white sm:border sm:border-gray-100 ${isActiveRoute(
             '/arrivals'
           )}`"
           >ARRIVALS</router-link
         >
         <router-link
           to="/settings"
-          :class="`w-28 py-1.5 text-center text-sm text-white border border-gray-100 ${isActiveRoute(
+          :class="`sm:w-28 py-1.5 px-2 text-center text-sm text-white sm:border sm:border-gray-100 ${isActiveRoute(
             '/settings'
           )}`"
           >SETTINGS</router-link
@@ -63,9 +64,16 @@ const logOut = () => {
       <div
         v-if="store.user"
         @click="logOut"
-        class="text-white flex items-center px-4 cursor-pointer hover:text-gray-100"
+        class="hidden sm:flex text-white items-center px-4 cursor-pointer hover:text-gray-100"
       >
         Sign out
+      </div>
+      <div
+        v-if="store.user"
+        @click="logOut"
+        class="w-12 flex sm:hidden text-white items-center px-4 cursor-pointer hover:text-gray-100"
+      >
+        <img src="/logout.png" alt="Logout icon" />
       </div>
     </div>
   </header>
