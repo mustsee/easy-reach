@@ -84,6 +84,7 @@ const debounce = ref(false)
 const debounceLoadData = ref(false)
 
 let now = new Date()
+
 if (!store.currentDate) {
   let currentDate = new Date(now.setDate(now.getDate() + 2))
   store.setCurrentDate(currentDate)
@@ -93,7 +94,10 @@ const handlePreviousDate = () => {
   if (debounce.value) return
   debounce.value = true
   offSet.value -= 1
+  // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
+  store.currentDate.setHours(12) // Important for debug purpose
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() - 1))
+  console.log(currentDate)
   store.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
@@ -102,7 +106,10 @@ const handleNextDate = () => {
   if (debounce.value) return
   debounce.value = true
   offSet.value += 1
+  // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
+  store.currentDate.setHours(12)
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + 1))
+  console.log(currentDate)
   store.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
