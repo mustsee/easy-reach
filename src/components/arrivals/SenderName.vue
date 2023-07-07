@@ -19,7 +19,6 @@ await store.setSenders(senders.map((sender) => sender.name))
 } */
 
 store.$subscribe((mutation, state) => {
-  console.log('aa', state.currentSender)
   // The bug fix works but it fires a lot !
   // if (mutation.events.key === 'currentSender') {
   if (state.currentSender) {
