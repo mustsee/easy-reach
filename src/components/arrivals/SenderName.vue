@@ -1,6 +1,6 @@
 <script setup>
 import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
-import { useBookingsStore } from '../../stores/BookingsStore';
+import { useBookingsStore } from '../../stores/BookingsStore'
 import { queryByCollection } from '../../firebase/firestore'
 
 const store = useArrivalsOptionsStore()
@@ -19,9 +19,13 @@ await store.setSenders(senders.map((sender) => sender.name))
 } */
 
 store.$subscribe((mutation, state) => {
+  console.log('aa', state.currentSender)
   // The bug fix works but it fires a lot !
   // if (mutation.events.key === 'currentSender') {
+  if (state.currentSender) {
+    // Bug: Don't update sender name if state change with not sender name selected
     bookingsStore.setSenderName(state.currentSender)
+  }
   //}
 })
 </script>
