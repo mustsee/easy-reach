@@ -38,6 +38,11 @@ const updateArrivalTimeSection = (booking, value) => {
 const displayInput = ref(false)
 const arrivalTimeText = ref(props.booking.arrivalTime)
 
+const handleCloseInput = () => {
+  displayInput.value = false
+  arrivalTimeText.value = props.booking.arrivalTime
+}
+
 const handleSaveArrivalTime = async () => {
   // bookingsStore.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
   try {
@@ -104,7 +109,7 @@ const handleSaveArrivalTime = async () => {
                   Save
                 </button>
                 <button
-                  @click="displayInput = false"
+                  @click="handleCloseInput"
                   class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
                 >
                   Cancel
