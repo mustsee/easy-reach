@@ -97,7 +97,6 @@ const handlePreviousDate = () => {
   // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
   store.currentDate.setHours(12) // Important for debug purpose
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() - 1))
-  console.log(currentDate)
   store.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
@@ -109,7 +108,6 @@ const handleNextDate = () => {
   // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
   store.currentDate.setHours(12)
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + 1))
-  console.log(currentDate)
   store.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
