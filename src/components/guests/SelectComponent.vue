@@ -8,6 +8,9 @@ const props = defineProps(['bookId', 'messageType' ])
 const messagesStore = useMessagesStore()
 const bookingsStore = useBookingsStore()
 
+// TODO: Getters should be side-effect free (no async functions)
+// https://vuejs.org/guide/essentials/computed.html#getters-should-be-side-effect-free
+// I guess I should use a watcher here
 const currentMessage = computed({
   get() {
     return props.messageType
