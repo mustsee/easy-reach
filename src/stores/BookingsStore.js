@@ -12,7 +12,8 @@ const ArrivalsOptionsStore = useArrivalsOptionsStore()
 
 export const useBookingsStore = defineStore('bookings', {
   state: () => ({
-    bookings: null
+    bookings: null,
+    isSendingMail: false,
   }),
   getters: {
     getBookings(state) {
@@ -204,6 +205,7 @@ export const useBookingsStore = defineStore('bookings', {
     },
     async sendEmail(booking) {
       try {
+        this.isSendingMail = true
         const url =
           'sendEmail?guestEmail=' + booking.email + '&text=' + JSON.stringify(booking.text)
         const response = await fetch(functionBaseURL + url)
@@ -213,6 +215,8 @@ export const useBookingsStore = defineStore('bookings', {
       } catch (error) {
         this.updateBooking(booking.bookId, { status: 'error' })
         console.log('Error in sendEmail: ', error)
+      } finally {
+        this.isSendingMail = false
       }
     }
   }

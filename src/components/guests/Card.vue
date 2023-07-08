@@ -38,6 +38,11 @@ const updateArrivalTimeSection = (booking, value) => {
 const displayInput = ref(false)
 const arrivalTimeText = ref(props.booking.arrivalTime)
 
+const handleDisplayInput = () => {
+  displayInput.value = true
+  arrivalTimeText.value = props.booking.arrivalTime
+}
+
 const handleCloseInput = () => {
   displayInput.value = false
   arrivalTimeText.value = props.booking.arrivalTime
@@ -82,7 +87,7 @@ const handleSaveArrivalTime = async () => {
                 <p class="text-gray-900">Arrival time</p>
                 <div v-if="!displayInput">
                   <img
-                    @click="displayInput = true"
+                    @click="handleDisplayInput"
                     src="/edit.svg"
                     alt="Edit icon"
                     class="ml-2 h-3 w-3 cursor-pointer"
@@ -142,6 +147,7 @@ const handleSaveArrivalTime = async () => {
             class="action-button rounded-md shadow cursor-pointer"
             @click="sendEmail(booking)"
             :class="[
+              bookingsStore.isSendingMail ? 'pointer-events-none opacity-50' : '',
               'flex items-center justify-center w-full px-5 py-3 text-base font-medium text-red-600 border border-red-600 bg-white rounded-md hover:bg-red-200 transition-all'
             ]"
           >
