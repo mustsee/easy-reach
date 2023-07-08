@@ -27,6 +27,7 @@
           <span>{{ store.displayDate }}</span>
           <!-- Find where is the best to put this button -->
           <span
+            title="update Data"
             @click="handleLoadData"
             :class="[
               bookingsStore.getNumberOfGuests ? '' : 'pointer-events-none opacity-50',
