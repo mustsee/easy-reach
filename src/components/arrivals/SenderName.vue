@@ -20,7 +20,7 @@ await store.setSenders(senders.map((sender) => sender.name))
 
 store.$subscribe((mutation, state) => {
   // The bug fix works but it fires a lot !
-  // if (mutation.events.key === 'currentSender') {
+  // if (mutation.events.key === 'currentSender') { // This doesn't work on prod, don't know why
   if (state.currentSender) {
     // Bug: Don't update sender name if state change with not sender name selected
     bookingsStore.setSenderName(state.currentSender)

@@ -13,7 +13,7 @@ const ArrivalsOptionsStore = useArrivalsOptionsStore()
 export const useBookingsStore = defineStore('bookings', {
   state: () => ({
     bookings: null,
-    isSendingMail: false,
+    isSendingMail: false
   }),
   getters: {
     getBookings(state) {
@@ -204,17 +204,37 @@ export const useBookingsStore = defineStore('bookings', {
       }
     },
     async sendEmail(booking) {
+      // OLD VERSION
+      /* try {
+        this.isSendingMail = true
+        const url =
+          'sendEmail?guestEmail=' + booking.email + '&text=' + JSON.stringify(booking.text)
+        const response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        console.log('res', res)
+        this.updateBooking(booking.bookId, { status: 'done' })
+        this.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
+      } catch (error) { // NEVER GETS HERE
+        this.updateBooking(booking.bookId, { status: 'error' })
+        console.log('Error in sendEmail: ', error)
+      } finally {
+        this.isSendingMail = false
+      } */
+      // VERSION THAT WORKS
       try {
         this.isSendingMail = true
         const url =
           'sendEmail?guestEmail=' + booking.email + '&text=' + JSON.stringify(booking.text)
         const response = await fetch(functionBaseURL + url)
         const res = await response.json()
-        this.updateBooking(booking.bookId, { status: 'done' })
-        this.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
-      } catch (error) {
-        this.updateBooking(booking.bookId, { status: 'error' })
-        console.log('Error in sendEmail: ', error)
+        // This is the way to take care of firefunctions, if I write them ok.
+        if (res.success) {
+          this.updateBooking(booking.bookId, { status: 'done' })
+          this.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
+        } else {
+          this.updateBooking(booking.bookId, { status: 'error' })
+          console.log('Error in sendEmail: ', res.error)
+        }
       } finally {
         this.isSendingMail = false
       }

@@ -107,7 +107,7 @@ const handleNextDate = () => {
   debounce.value = true
   offSet.value += 1
   // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
-  store.currentDate.setHours(12)
+  store.currentDate.setHours(12) // Important for debug purpose
   let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + 1))
   store.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
