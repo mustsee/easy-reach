@@ -87,7 +87,8 @@ const debounceLoadData = ref(false)
 let now = new Date()
 
 if (!store.currentDate) {
-  let currentDate = new Date(now.setDate(now.getDate() + 2))
+  let currentDate = new Date(now.setDate(now.getDate() + 2)) // Removes 4 hours !!!!
+  currentDate.setHours(12) // To prevent bug
   store.setCurrentDate(currentDate)
 }
 

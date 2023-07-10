@@ -7,7 +7,9 @@ import GuestCard from './../components/guests/Card.vue'
 const store = useBookingsStore()
 
 onMounted(() => {
-  if (!store.getBookings) { // When we come /settings page, don't load data a second time
+  // I think it doesn't work, it reloads anyway
+  if (!store.getBookings) {
+    // When we come /settings page, don't load data a second time
     loadData()
   }
 })
@@ -32,6 +34,7 @@ const loadData = () => {
   debounce.value = true
   store
     .loadGuestsData()
+    // This piece of code is never reached, no error is thrown !
     .catch((error) => console.log('Error in loadData function: ', error))
     .finally(() => (debounce.value = false))
 }
@@ -59,9 +62,6 @@ const loadData = () => {
     </span>
   </div>
   <div v-else>
-    <guest-card
-      v-for="(booking) in store.filteredBookings"
-      :booking="booking"
-    />
+    <guest-card v-for="booking  in store.filteredBookings" :booking="booking" />
   </div>
 </template>
