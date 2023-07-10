@@ -2,98 +2,65 @@
 import { computed } from 'vue'
 
 import Date from './Date.vue'
-import Guests from './Guests.vue'
-import WhatsApp from './WhatsApp.vue'
-import Email from './Email.vue'
-import Progression from './Progression.vue'
+
+import TopCard from './TopCard.vue'
+import GuestsIcon from '@/assets/icons/Guests.vue'
+import WhatsAppIcon from '@/assets/icons/WhatsApp.vue'
+import EmailIcon from '@/assets/icons/Email.vue'
+import ProgressionIcon from '@/assets/icons/Progression.vue'
+
 import SenderName from './SenderName.vue'
 import MessageTypes from './MessageTypes.vue'
 import Status from './Status.vue'
 
 const props = defineProps(['numberOfGuests', 'bookings'])
 
-const color = 'blue'
-const removeBorder = true
-
 const getWhatsAppDone = computed(() => {
-  if (props.bookings) {
-    return props.bookings.filter((item) => {
-      if (item.status === 'done' && item.type === 'whatsapp') return true
-    }).length
-  }
-  return 0
+  return props.bookings?.filter((item) => item.status === 'done' && item.type === 'whatsapp').length
 })
+
 const getWhatsAppTotal = computed(() => {
-  if (props.bookings) {
-    return props.bookings.filter((item) => {
-      if (item.type === 'whatsapp') return true
-    }).length
-  }
-  return 0
+  return props.bookings?.filter((item) => item.type === 'whatsapp').length
 })
+
 const getEmailDone = computed(() => {
-  if (props.bookings) {
-    return props.bookings.filter((item) => {
-      if (item.status === 'done' && item.type === 'email') return true
-    }).length
-  }
-  return 0
+  return props.bookings?.filter((item) => item.status === 'done' && item.type === 'email').length
 })
+
 const getEmailTotal = computed(() => {
-  if (props.bookings) {
-    return props.bookings.filter((item) => {
-      if (item.type === 'email') return true
-    }).length
-  }
-  return 0
+  return props.bookings?.filter((item) => item.type === 'email').length
 })
+
 const getProgression = computed(() => {
-  if (props.bookings) {
-    return props.bookings.filter((item) => {
-      if (item.status === 'done') return true
-    }).length
-  }
-  return 0
+  return props.bookings?.filter((item) => item.status === 'done').length
 })
 const getTotalDoable = computed(() => {
-  if (props.bookings) {
-    return getEmailTotal.value + getWhatsAppTotal.value
-  }
-  return 0
+  return getEmailTotal.value + getWhatsAppTotal.value
 })
 </script>
 
 <template>
   <div class="grid gap-6 my-8 sm:grid-cols-12">
-    <!-- 1 row -->
-    <date class="col-span-12" :removeBorder="removeBorder" />
-    <!-- 2 row -->
-    <guests
-      class="col-span-12 sm:col-span-6 lg:col-span-3"
-      :numberOfGuests="numberOfGuests"
-      :color="color"
-    />
-    <whats-app
-      class="col-span-12 sm:col-span-6 lg:col-span-3"
-      :done="getWhatsAppDone"
-      :total="getWhatsAppTotal"
-      :color="color"
-    />
-    <email
-      class="col-span-12 sm:col-span-6 lg:col-span-3"
-      :done="getEmailDone"
-      :total="getEmailTotal"
-      :color="color"
-    />
-    <progression
-      class="col-span-12 sm:col-span-6 lg:col-span-3"
-      :progress="getProgression"
-      :total="getTotalDoable"
-      :color="color"
-    />
-    <!-- 3 row -->
-    <!-- <web-whats-app class="col-span-1 sm:col-span-2 grid grid-cols-3 gap-6" :removeBorder="removeBorder" :connected="connected" /> -->
-    <!-- <div class="col-span-1 sm:col-span-2 flex flex-col sm:flex-row grid grid-cols-3 gap-6"> -->
+    <!-- 1rst row -->
+    <date class="col-span-12" :removeBorder="true" />
+    <!-- 2nd row -->
+    <TopCard class="col-span-12 sm:col-span-6 lg:col-span-3" title="Guests">
+      <template #icon><GuestsIcon class="w-5 h-5" /></template>
+      <template #data>{{ numberOfGuests }}</template>
+    </TopCard>
+    <TopCard class="col-span-12 sm:col-span-6 lg:col-span-3" title="WhatsApp">
+      <template #icon><WhatsAppIcon class="w-5 h-5" /></template>
+      <template #data>{{ getWhatsAppDone }} / {{ getWhatsAppTotal }}</template>
+    </TopCard>
+    <TopCard class="col-span-12 sm:col-span-6 lg:col-span-3" title="Email">
+      <template #icon><EmailIcon class="w-5 h-5" /></template>
+      <template #data>{{ getEmailDone }} / {{ getEmailTotal }}</template>
+    </TopCard>
+    <TopCard class="col-span-12 sm:col-span-6 lg:col-span-3" title="Progression">
+      <template #icon><ProgressionIcon class="w-5 h-5" /></template>
+      <template #data>{{ getProgression }} / {{ getTotalDoable }}</template>
+    </TopCard>
+    <!-- 3rd row -->
     <Suspense>
       <sender-name class="col-span-12 sm:col-span-4" :removeBorder="false" />
       <template #fallback>
