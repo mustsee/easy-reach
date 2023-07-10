@@ -51,7 +51,7 @@ const handleCloseInput = () => {
 const handleSaveArrivalTime = async () => {
   // bookingsStore.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
   try {
-    await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value )
+    await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value)
   } finally {
     // arrivalTimeText.value = ''
     displayInput.value = false
@@ -98,7 +98,7 @@ const handleSaveArrivalTime = async () => {
               <p v-if="!displayInput" class="text-sm text-gray-700">
                 {{ booking.arrivalTime ? booking.arrivalTime : 'No data' }}
               </p>
-              <p v-else>
+              <div v-else>
                 <input
                   v-model="arrivalTimeText"
                   type="text"
@@ -108,20 +108,19 @@ const handleSaveArrivalTime = async () => {
                 />
                 <div class="flex gap-4">
                   <button
-                  @click="handleSaveArrivalTime"
-                  class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
-                >
-                  Save
-                </button>
-                <button
-                  @click="handleCloseInput"
-                  class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
-                >
-                  Cancel
-                </button>
+                    @click="handleSaveArrivalTime"
+                    class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+                  >
+                    Save
+                  </button>
+                  <button
+                    @click="handleCloseInput"
+                    class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+                  >
+                    Cancel
+                  </button>
                 </div>
-               
-              </p>
+              </div>
             </li>
             <li class="lg:col-span-1">
               <p class="text-gray-900">Comments</p>
@@ -313,6 +312,12 @@ const handleSaveArrivalTime = async () => {
         <div class="flex flex-1 m-12 justify-center items-center">
           <div class="w-12 h-12 text-grey-500">Error</div>
         </div>
+      </div>
+      <div
+        v-if="booking.status === 'other'"
+        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
+      >
+        <div>There is no way to contact the guest (no phone and no email)</div>
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useMessagesStore } from '../../stores/MessagesStore'
 import { useBookingsStore } from '../../stores/BookingsStore'
 
-const props = defineProps(['bookId', 'messageType' ])
+const props = defineProps(['bookId', 'messageType'])
 
 const messagesStore = useMessagesStore()
 const bookingsStore = useBookingsStore()

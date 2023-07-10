@@ -62,6 +62,6 @@ const loadData = () => {
     </span>
   </div>
   <div v-else>
-    <guest-card v-for="booking  in store.filteredBookings" :booking="booking" />
+    <guest-card v-for="booking in store.filteredBookings" :booking="booking" />
   </div>
 </template>

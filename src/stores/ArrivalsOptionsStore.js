@@ -8,7 +8,8 @@ export const useArrivalsOptionsStore = defineStore('arrivalsOptions', {
     typeFilters: [
       { value: 'all', displayName: 'All messages' },
       { value: 'whatsapp', displayName: 'WhatsApp' },
-      { value: 'email', displayName: 'Email' }
+      { value: 'email', displayName: 'Email' },
+      { value: 'other', displayName: 'Other' }
     ],
     currentTypeFilter: '',
     statuses: [
