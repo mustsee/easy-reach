@@ -34,6 +34,7 @@ const getEmailTotal = computed(() => {
 const getProgression = computed(() => {
   return props.bookings?.filter((item) => item.status === 'done').length
 })
+
 const getTotalDoable = computed(() => {
   return getEmailTotal.value + getWhatsAppTotal.value
 })
