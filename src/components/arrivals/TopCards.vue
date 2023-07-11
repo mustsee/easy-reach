@@ -7,7 +7,12 @@ import WhatsAppIcon from '@/assets/icons/WhatsApp.vue'
 import EmailIcon from '@/assets/icons/Email.vue'
 import ProgressionIcon from '@/assets/icons/Progression.vue'
 
-const props = defineProps(['numberOfGuests', 'bookings'])
+const props = defineProps(['bookings'])
+
+const getNumberOfGuests = computed(() => {
+  if (props.bookings) return props.bookings.length
+  return 0
+})
 
 const getWhatsAppDone = computed(() => {
   if (props.bookings) {
@@ -53,7 +58,7 @@ const getTotalDoable = computed(() => {
 <template>
   <TopCard data-cy="guests" class="col-span-12 sm:col-span-6 lg:col-span-3" title="Guests">
     <template #icon><GuestsIcon class="w-5 h-5" /></template>
-    <template #data>{{ numberOfGuests }}</template>
+    <template #data>{{ getNumberOfGuests }}</template>
   </TopCard>
   <TopCard data-cy="whatsapp" class="col-span-12 sm:col-span-6 lg:col-span-3" title="WhatsApp">
     <template #icon><WhatsAppIcon class="w-5 h-5" /></template>

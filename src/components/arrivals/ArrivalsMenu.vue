@@ -5,7 +5,7 @@ import SenderName from './SenderName.vue'
 import MessageTypes from './MessageTypes.vue'
 import Status from './Status.vue'
 
-defineProps(['numberOfGuests', 'bookings'])
+defineProps(['bookings'])
 </script>
 
 <template>
@@ -13,7 +13,7 @@ defineProps(['numberOfGuests', 'bookings'])
     <!-- 1rst row -->
     <date class="col-span-12" :removeBorder="true" />
     <!-- 2nd row -->
-    <TopCards :bookings="bookings" :numberOfGuests="numberOfGuests" />
+    <TopCards :bookings="bookings" />
     <!-- 3rd row -->
     <Suspense>
       <SenderName class="col-span-12 sm:col-span-4" :removeBorder="false" />

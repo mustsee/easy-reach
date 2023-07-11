@@ -41,7 +41,7 @@ const loadData = () => {
 </script>
 
 <template>
-  <arrivals-menu :numberOfGuests="store.getNumberOfGuests" :bookings="store.getBookings" />
+  <arrivals-menu :bookings="store.getBookings" />
   <div
     v-if="!store.getNumberOfGuests"
     class="flex flex-col mb-12 justify-center items-center text-gray-500"
