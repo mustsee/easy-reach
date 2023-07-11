@@ -31,7 +31,14 @@ export const useBookingsStore = defineStore('bookings', {
       const statusFilter = ArrivalsOptionsStore.currentStatus
       let res = this.getBookings
       if (typeFilter !== 'all') res = res.filter((booking) => booking.type === typeFilter)
-      if (statusFilter !== 'all') res = res.filter((booking) => booking.status === statusFilter)
+      if (statusFilter !== 'all') {
+        if (statusFilter === 'todo') {
+          res = res.filter((booking) => booking.status === 'todo' || booking.status === 'inProgress')
+        } else {
+          res = res.filter((booking) => booking.status === statusFilter)
+        }
+      }
+      // if (statusFilter !== 'all') res = res.filter((booking) => booking.status === statusFilter)
       return res
     }
   },
