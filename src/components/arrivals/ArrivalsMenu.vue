@@ -2,7 +2,7 @@
 import Date from './Date.vue'
 import TopCards from './TopCards.vue'
 import SenderName from './SenderName.vue'
-import MessageTypes from './MessageTypes.vue'
+import Type from './Type.vue'
 import Status from './Status.vue'
 
 defineProps(['bookings'])
@@ -21,7 +21,7 @@ defineProps(['bookings'])
         <div>loading...</div>
       </template>
     </Suspense>
-    <MessageTypes class="col-span-12 sm:col-span-4" />
+    <Type class="col-span-12 sm:col-span-4" />
     <Status class="col-span-12 sm:col-span-4" />
   </div>
 </template>

@@ -9,14 +9,14 @@ import SelectSkeleton from '../reusable/SelectSkeleton.vue'
 </script>
 
 <template>
-  <SelectSkeleton>
+  <SelectSkeleton class="sm:my-4">
     <select
       v-model="store.currentTypeFilter"
-      class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
+      class="select"
       name="type"
       id="type"
     >
-      <option disabled>Message type</option>
+      <option disabled>Type</option>
       <option v-for="typeFilter in store.typeFilters" :value="typeFilter.value">
         {{ typeFilter.displayName }}
       </option>

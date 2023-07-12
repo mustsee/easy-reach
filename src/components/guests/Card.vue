@@ -3,8 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
 import { useMessagesStore } from '../../stores/MessagesStore'
 
-import SelectComponent from './SelectComponent.vue'
-import TextareaComponent from './TextareaComponent.vue'
+import MessageType from './MessageType.vue'
+import Text from './Text.vue'
 
 const bookingsStore = useBookingsStore()
 const messagesStore = useMessagesStore()
@@ -138,8 +138,8 @@ const handleSaveArrivalTime = async () => {
         v-if="booking.status === 'todo'"
         class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
       >
-        <select-component :bookId="booking.bookId" :messageType="booking.messageType" />
-        <textarea-component :bookId="booking.bookId" :text="booking.text" class="mt-6" />
+        <MessageType :bookId="booking.bookId" :messageType="booking.messageType" />
+        <Text :bookId="booking.bookId" :text="booking.text" class="mt-6" />
         <div class="mt-8">
           <div
             v-if="booking.type === 'email'"

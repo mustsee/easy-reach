@@ -9,10 +9,10 @@ import SelectSkeleton from '../reusable/SelectSkeleton.vue'
 </script>
 
 <template>
-  <SelectSkeleton>
+  <SelectSkeleton class="sm:my-4">
     <select
       v-model="store.currentStatus"
-      class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
+      class="select"
       name="status"
       id="status"
     >

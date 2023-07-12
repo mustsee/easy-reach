@@ -6,4 +6,8 @@
   .prevent-click {
     @apply pointer-events-none opacity-50;
   }
+
+  .select {
+    @apply appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none
+  }
 }

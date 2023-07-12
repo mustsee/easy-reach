@@ -29,10 +29,10 @@ store.$subscribe((mutation, state) => {
 </script>
 
 <template>
-  <SelectSkeleton>
+  <SelectSkeleton class="sm:my-4">
     <select
       v-model="store.currentSender"
-      class="appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none"
+      class="select"
       name="senderName"
       id="senderName"
     >
