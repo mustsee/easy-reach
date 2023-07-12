@@ -132,10 +132,7 @@ const handleSaveArrivalTime = async () => {
           </ul>
         </div>
       </div>
-      <div
-        v-if="booking.status === 'todo'"
-        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
-      >
+      <div v-if="booking.status === 'todo'" class="status-card">
         <MessageType :bookId="booking.bookId" :messageType="booking.messageType" />
         <Text :bookId="booking.bookId" :text="booking.text" class="mt-6" />
         <div class="mt-8">
@@ -144,7 +141,7 @@ const handleSaveArrivalTime = async () => {
             class="action-button rounded-md shadow cursor-pointer"
             @click="sendEmail(booking)"
             :class="[
-              bookingsStore.isSendingMail ? 'pointer-events-none opacity-50' : '',
+              bookingsStore.isSendingMail ? 'prevent-click' : '',
               'flex items-center justify-center w-full px-5 py-3 text-base font-medium text-red-600 border border-red-600 bg-white rounded-md hover:bg-red-200 transition-all'
             ]"
           >
@@ -166,10 +163,7 @@ const handleSaveArrivalTime = async () => {
           </div>
         </div>
       </div>
-      <div
-        v-else-if="booking.status === 'inProgress'"
-        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
-      >
+      <div v-else-if="booking.status === 'inProgress'" class="status-card">
         <div class="flex justify-end" title="Cancel">
           <span @click="updateBooking(booking.bookId, { status: 'todo' })">
             <CancelIcon class="w-6 h-6 cursor-pointer" />
@@ -212,23 +206,17 @@ const handleSaveArrivalTime = async () => {
           </div>
         </div>
       </div>
-      <div
-        v-else-if="booking.status === 'done'"
-        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
-      >
+      <div v-else-if="booking.status === 'done'" class="status-card">
         <div class="flex justify-end" title="Cancel">
           <span @click="updateBooking(booking.bookId, { status: 'todo' })">
             <CancelIcon class="w-6 h-6 cursor-pointer" />
           </span>
         </div>
         <div class="flex flex-1 m-12 justify-center items-center">
-          <SentIcon class="w-12 h-12 text-green-500"/>
+          <SentIcon class="w-12 h-12 text-green-500" />
         </div>
       </div>
-      <div
-        v-else-if="booking.status === 'error'"
-        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
-      >
+      <div v-else-if="booking.status === 'error'" class="status-card">
         <div class="flex justify-end" title="Cancel">
           <span @click="updateBooking(booking.bookId, { status: 'todo' })">
             <CancelIcon class="w-6 h-6 cursor-pointer" />
@@ -238,10 +226,7 @@ const handleSaveArrivalTime = async () => {
           <div class="w-12 h-12 text-grey-500">Error</div>
         </div>
       </div>
-      <div
-        v-if="booking.status === 'other'"
-        class="lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12"
-      >
+      <div v-if="booking.status === 'other'" class="status-card">
         <div>There is no way to contact the guest (no phone and no email)</div>
       </div>
     </div>

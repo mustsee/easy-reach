@@ -8,6 +8,10 @@
   }
 
   .select {
-    @apply appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none
+    @apply appearance-none w-full py-2 pl-3 pr-10 bg-white focus:outline-none;
+  }
+
+  .status-card {
+    @apply lg:w-3/5 px-6 py-8 text-center bg-gray-50 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12;
   }
 }
