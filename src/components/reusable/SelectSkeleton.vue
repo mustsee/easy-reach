@@ -1,7 +1,3 @@
-<script setup>
-import ArrowDownIcon from '../../assets/icons/ArrowDown.vue'
-</script>
-
 <template>
   <div class="relative border border-gray-200 text-gray-700 shadow-sm">
     <slot></slot>

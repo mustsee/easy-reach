@@ -10,6 +10,5 @@
 </template>
 
 <script setup>
-import LoadIcon from '../../assets/icons/Load.vue'
 defineProps(['preventClick'])
 </script>

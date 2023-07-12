@@ -49,9 +49,6 @@ import { useDateStore } from '../../stores/DateStore'
 import { useBookingsStore } from '../../stores/BookingsStore'
 
 import DateItem from '../../components/reusable/DateItem.vue'
-import LeftTriangleIcon from '../../assets/icons/LeftTriangle.vue'
-import RightTriangleIcon from '../../assets/icons/RightTriangle.vue'
-import RefreshIcon from '../../assets/icons/Refresh.vue'
 
 const dateStore = useDateStore()
 const bookingsStore = useBookingsStore()

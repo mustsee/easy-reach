@@ -2,10 +2,6 @@
 import { computed } from 'vue'
 
 import TopCard from '../reusable/TopCard.vue'
-import GuestsIcon from '@/assets/icons/Guests.vue'
-import WhatsAppIcon from '@/assets/icons/WhatsApp.vue'
-import EmailIcon from '@/assets/icons/Email.vue'
-import ProgressionIcon from '@/assets/icons/Progression.vue'
 
 const props = defineProps(['bookings'])
 

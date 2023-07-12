@@ -6,7 +6,6 @@
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
-      class="icon-tabler"
     >
       <rect width="18" height="14" x="3" y="5" rx="2"></rect>
       <path d="m3 7 9 6 9-6"></path>

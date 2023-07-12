@@ -6,14 +6,6 @@ import { useMessagesStore } from '../../stores/MessagesStore'
 import MessageType from './MessageType.vue'
 import Text from './Text.vue'
 
-import EditIcon from '../../assets/icons/Edit.vue'
-import EmailIcon from '../../assets/icons/EmailLight.vue'
-import WhatsAppIcon from '../../assets/icons/WhatsApp.vue'
-import CancelIcon from '../../assets/icons/Cancel.vue'
-import ThumbsDownIcon from '../../assets/icons/ThumbsDown.vue'
-import ThumbsUpIcon from '../../assets/icons/ThumbsUp.vue'
-import SentIcon from '../../assets/icons/Sent.vue'
-
 const bookingsStore = useBookingsStore()
 const messagesStore = useMessagesStore()
 
@@ -157,7 +149,7 @@ const handleSaveArrivalTime = async () => {
             ]"
           >
             Send email
-            <EmailIcon class="w-6 h-6 ml-2" />
+            <EmailLightIcon class="w-6 h-6 ml-2" />
           </div>
           <div v-if="booking.type === 'whatsapp'" class="action-button rounded-md shadow">
             <a
