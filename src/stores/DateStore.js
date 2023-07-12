@@ -3,22 +3,31 @@ import { defineStore } from 'pinia'
 export const useDateStore = defineStore('date', {
   state: () => ({
     currentDate: null,
-    options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    displayOptions: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
+    dataOptions: { year: 'numeric', month: 'numeric', day: 'numeric' }
   }),
   getters: {
     displayDate(state) {
       if (state.currentDate) {
-        return state.currentDate.toLocaleDateString('en-GB', state.options)
+        return state.currentDate.toLocaleDateString('en-GB', state.displayOptions)
       }
     },
     apiDate(state) {
       if (state.currentDate) {
-        return state.currentDate.toISOString().split('T')[0].replace(/-/g, '')
+        return state.currentDate
+          .toLocaleDateString('en-GB', state.dataOptions)
+          .split('/')
+          .reverse()
+          .join('')
       }
     },
     fireStoreDate(state) {
       if (state.currentDate) {
-        return state.currentDate.toISOString().split('T')[0]
+        return state.currentDate
+          .toLocaleDateString('en-GB', state.dataOptions)
+          .split('/')
+          .reverse()
+          .join('-')
       }
     }
   },
