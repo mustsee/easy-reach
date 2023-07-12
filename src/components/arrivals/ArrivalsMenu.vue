@@ -11,7 +11,7 @@ defineProps(['bookings'])
 <template>
   <div class="grid gap-6 my-8 sm:grid-cols-12">
     <!-- 1rst row -->
-    <date class="col-span-12" :removeBorder="true" />
+    <date class="col-span-12" />
     <!-- 2nd row -->
     <TopCards :bookings="bookings" />
     <!-- 3rd row -->
