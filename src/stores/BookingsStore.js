@@ -162,7 +162,7 @@ export const useBookingsStore = defineStore('bookings', {
       } catch (e) {
         // throw new Error('Error !!!') // To reach the next catch, throw this
         // to pass the actual error, don't throw a new one : throw(e) will do
-        console.log('1 Error in loadGuestsData: ', e)
+        console.log('Error in loadGuestsData: ', e)
       }
     },
     async updateBooking(bookId, value) {

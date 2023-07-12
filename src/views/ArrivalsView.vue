@@ -1,18 +1,28 @@
-<script setup>
-import { onMounted, ref } from 'vue'
+<script>
+import { useDateStore } from '../stores/DateStore'
 import { useBookingsStore } from './../stores/BookingsStore'
-import ArrivalsMenu from './../components/arrivals/ArrivalsMenu.vue'
-import GuestCard from './../components/guests/Card.vue'
+
+const dateStore = useDateStore()
+const bookingsStore = useBookingsStore()
+
+// On first load, set date once
+let now = new Date()
+let currentDate = new Date(now.setDate(now.getDate() + 2)) // Removes 4 hours !!!!
+currentDate.setHours(12) // To prevent bug
+dateStore.setCurrentDate(currentDate)
+
+// Then get bookings[date]
+bookingsStore.loadGuestsData()
+</script>
+
+<script setup>
+import { ref } from 'vue'
+import { useBookingsStore } from './../stores/BookingsStore'
+import ArrivalsMenu from '../components/arrivals/ArrivalsMenu.vue'
+import GuestCard from '../components/guests/Card.vue'
+import LoadIcon from '../assets/icons/Load.vue'
 
 const store = useBookingsStore()
-
-onMounted(() => {
-  // I think it doesn't work, it reloads anyway
-  if (!store.getBookings) {
-    // When we come /settings page, don't load data a second time
-    loadData()
-  }
-})
 
 const debounceLoadData = ref(false)
 const debounce = ref(false)
@@ -50,15 +60,11 @@ const loadData = () => {
     <span
       @click="writeData"
       :class="!debounceLoadData ? '' : 'pointer-events-none opacity-50'"
-      title="Upload data"
+      title="Load data"
     >
-      <svg
-        fill="currentColor"
+      <LoadIcon
         class="my-2 py-9 px-4 w-24 h-24 border bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 hover:text-gray-600"
-        viewBox="0 0 24 24"
-      >
-        <path d="M12 21l-8-9h6v-12h4v12h6l-8 9zm9-1v2h-18v-2h-2v4h22v-4h-2z" />
-      </svg>
+      />
     </span>
   </div>
   <div v-else>

@@ -17,10 +17,10 @@
         <p
           class="flex items-center justify-center text-sm sm:text-base text-center tracking-wider font-medium uppercase text-gray-500 px-2 sm:px-8 sm:w-96 select-none"
         >
-          <span>{{ store.displayDate }}</span>
+          <span>{{ dateStore.displayDate }}</span>
           <span
-            title="update Data"
-            @click="handleLoadData"
+            title="Update data"
+            @click="handleUpdateData"
             :class="preventUpdate && 'prevent-click'"
           >
             <RefreshIcon class="py-1 px-2 w-10 h-8 cursor-pointer hover:text-gray-600" />
@@ -53,7 +53,7 @@ import LeftTriangleIcon from '../../assets/icons/LeftTriangle.vue'
 import RightTriangleIcon from '../../assets/icons/RightTriangle.vue'
 import RefreshIcon from '../../assets/icons/Refresh.vue'
 
-const store = useDateStore()
+const dateStore = useDateStore()
 const bookingsStore = useBookingsStore()
 
 const offSet = ref(0)
@@ -62,14 +62,6 @@ const maxOffSet = 10
 
 const debounce = ref(false)
 const debounceLoadData = ref(false)
-
-let now = new Date()
-
-if (!store.currentDate) {
-  let currentDate = new Date(now.setDate(now.getDate() + 2)) // Removes 4 hours !!!!
-  currentDate.setHours(12) // To prevent bug
-  store.setCurrentDate(currentDate)
-}
 
 const preventPrevious = computed(() => {
   return offSet.value <= minOffSet || debounce.value
@@ -88,13 +80,13 @@ const handleDate = (increaseBy) => {
   debounce.value = true
   offSet.value = offSet.value + increaseBy
   // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
-  store.currentDate.setHours(12) // Important for debug purpose
-  let currentDate = new Date(store.currentDate.setDate(store.currentDate.getDate() + increaseBy))
-  store.setCurrentDate(currentDate)
+  dateStore.currentDate.setHours(12) // Important for debug purpose
+  let currentDate = new Date(dateStore.currentDate.setDate(dateStore.currentDate.getDate() + increaseBy))
+  dateStore.setCurrentDate(currentDate)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
 
-const handleLoadData = () => {
+const handleUpdateData = () => {
   if (debounceLoadData.value) return
   debounceLoadData.value = true
   bookingsStore
@@ -102,7 +94,7 @@ const handleLoadData = () => {
     .then((res) => {
       if (res.length > 0) bookingsStore.loadGuestsData()
     })
-    .catch((error) => console.log('Error in handleLoadData function: ', error)) // Unreachable code
+    .catch((error) => console.log('Error in handleUpdateData function: ', error)) // Unreachable code
   setTimeout(() => (debounceLoadData.value = false), 5000)
 }
 </script>
