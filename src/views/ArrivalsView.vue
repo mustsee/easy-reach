@@ -6,10 +6,7 @@ const dateStore = useDateStore()
 const bookingsStore = useBookingsStore()
 
 // On first load, set date once
-let now = new Date()
-let currentDate = new Date(now.setDate(now.getDate() + 2)) // Removes 4 hours !!!!
-currentDate.setHours(12) // To prevent bug
-dateStore.setCurrentDate(currentDate)
+dateStore.setCurrentDate()
 
 // Then get bookings[date]
 bookingsStore.loadGuestsData()

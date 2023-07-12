@@ -12,28 +12,25 @@ export const useDateStore = defineStore('date', {
       }
     },
     apiDate(state) {
-      const { currentDate } = state
-      if (currentDate) {
-        let timezoneOffset = currentDate.getTimezoneOffset()
-        let modifiedDate = new Date(
-          currentDate.setHours(currentDate.getHours() + timezoneOffset / 60)
-        )
-        return modifiedDate.toISOString().split('T')[0].replace(/-/g, '')
+      if (state.currentDate) {
+        return state.currentDate.toISOString().split('T')[0].replace(/-/g, '')
       }
     },
     fireStoreDate(state) {
-      const { currentDate } = state
-      if (currentDate) {
-        let timezoneOffset = currentDate.getTimezoneOffset()
-        let modifiedDate = new Date(
-          currentDate.setHours(currentDate.getHours() + timezoneOffset / 60)
-        )
-        return modifiedDate.toISOString().split('T')[0]
+      if (state.currentDate) {
+        return state.currentDate.toISOString().split('T')[0]
       }
     }
   },
   actions: {
-    setCurrentDate(value) {
+    setCurrentDate(increaseBy = 0) {
+      let value
+      if (!this.currentDate) {
+        let now = new Date()
+        value = new Date(now.setDate(now.getDate() + 2))
+      } else {
+        value = new Date(this.currentDate.setDate(this.currentDate.getDate() + increaseBy))
+      }
       this.currentDate = value
     }
   }

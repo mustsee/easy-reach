@@ -79,10 +79,7 @@ const handleDate = (increaseBy) => {
   if (debounce.value) return
   debounce.value = true
   offSet.value = offSet.value + increaseBy
-  // Important to set the hour, if not, the setDate getDate functions remove 4hours every day...
-  dateStore.currentDate.setHours(12) // Important for debug purpose
-  let currentDate = new Date(dateStore.currentDate.setDate(dateStore.currentDate.getDate() + increaseBy))
-  dateStore.setCurrentDate(currentDate)
+  dateStore.setCurrentDate(increaseBy)
   bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
 }
 
