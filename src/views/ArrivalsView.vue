@@ -16,13 +16,12 @@ bookingsStore.loadGuestsData()
 import { ref } from 'vue'
 import { useBookingsStore } from './../stores/BookingsStore'
 import ArrivalsMenu from '../components/arrivals/ArrivalsMenu.vue'
+import NoGuests from '../components/guests/NoGuests.vue'
 import GuestCard from '../components/guests/Card.vue'
-import LoadIcon from '../assets/icons/Load.vue'
 
 const store = useBookingsStore()
 
 const debounceLoadData = ref(false)
-const debounce = ref(false)
 
 const writeData = () => {
   if (debounceLoadData.value) return
@@ -37,34 +36,19 @@ const writeData = () => {
 }
 
 const loadData = () => {
-  if (debounce.value) return
-  debounce.value = true
   store
     .loadGuestsData()
     // This piece of code is never reached, no error is thrown !
     .catch((error) => console.log('Error in loadData function: ', error))
-    .finally(() => (debounce.value = false))
 }
 </script>
 
 <template>
-  <arrivals-menu :bookings="store.getBookings" />
-  <div
-    v-if="!store.getNumberOfGuests"
-    class="flex flex-col mb-12 justify-center items-center text-gray-500"
-  >
-    <span class="my-8 text-xl font-semi-bold">NO DATA</span>
-    <span
-      @click="writeData"
-      :class="!debounceLoadData ? '' : 'pointer-events-none opacity-50'"
-      title="Load data"
-    >
-      <LoadIcon
-        class="my-2 py-9 px-4 w-24 h-24 border bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 hover:text-gray-600"
-      />
-    </span>
+  <ArrivalsMenu :bookings="store.getBookings" />
+  <div v-if="!store.getNumberOfGuests">
+    <NoGuests @writeData="writeData" :preventClick="debounceLoadData" />
   </div>
   <div v-else>
-    <guest-card v-for="booking in store.filteredBookings" :booking="booking" />
+    <GuestCard v-for="booking in store.filteredBookings" :booking="booking" />
   </div>
 </template>
