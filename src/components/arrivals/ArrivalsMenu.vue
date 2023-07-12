@@ -16,12 +16,12 @@ defineProps(['bookings'])
     <TopCards :bookings="bookings" />
     <!-- 3rd row -->
     <Suspense>
-      <SenderName class="col-span-12 sm:col-span-4" :removeBorder="false" />
+      <SenderName class="col-span-12 sm:col-span-4" />
       <template #fallback>
         <div>loading...</div>
       </template>
     </Suspense>
-    <MessageTypes class="col-span-12 sm:col-span-4" :removeBorder="false" />
-    <Status class="col-span-12 sm:col-span-4" :removeBorder="false" />
+    <MessageTypes class="col-span-12 sm:col-span-4" />
+    <Status class="col-span-12 sm:col-span-4" />
   </div>
 </template>

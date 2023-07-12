@@ -14,19 +14,16 @@ bookingsStore.loadGuestsData()
 
 <script setup>
 import { ref } from 'vue'
-import { useBookingsStore } from './../stores/BookingsStore'
 import ArrivalsMenu from '../components/arrivals/ArrivalsMenu.vue'
 import NoGuests from '../components/guests/NoGuests.vue'
 import GuestCard from '../components/guests/Card.vue'
-
-const store = useBookingsStore()
 
 const debounceLoadData = ref(false)
 
 const writeData = () => {
   if (debounceLoadData.value) return
   debounceLoadData.value = true
-  store
+  bookingsStore
     .writeGuestsData()
     .then((res) => {
       if (res.length > 0) loadData()
@@ -36,7 +33,7 @@ const writeData = () => {
 }
 
 const loadData = () => {
-  store
+  bookingsStore
     .loadGuestsData()
     // This piece of code is never reached, no error is thrown !
     .catch((error) => console.log('Error in loadData function: ', error))
@@ -44,11 +41,11 @@ const loadData = () => {
 </script>
 
 <template>
-  <ArrivalsMenu :bookings="store.getBookings" />
-  <div v-if="!store.getNumberOfGuests">
+  <ArrivalsMenu :bookings="bookingsStore.getBookings" />
+  <div v-if="!bookingsStore.getNumberOfGuests">
     <NoGuests @writeData="writeData" :preventClick="debounceLoadData" />
   </div>
   <div v-else>
-    <GuestCard v-for="booking in store.filteredBookings" :booking="booking" />
+    <GuestCard v-for="booking in bookingsStore.filteredBookings" :booking="booking" />
   </div>
 </template>
