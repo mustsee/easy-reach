@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
 import { useMessagesStore } from '../../stores/MessagesStore'
 
+import CardSkeleton from '../reusable/CardSkeleton.vue'
 import MessageType from './MessageType.vue'
 import Text from './Text.vue'
 
@@ -163,12 +164,11 @@ const handleSaveArrivalTime = async () => {
           </div>
         </div>
       </div>
-      <div v-else-if="booking.status === 'inProgress'" class="status-card">
-        <div class="flex justify-end" title="Cancel">
-          <span @click="updateBooking(booking.bookId, { status: 'todo' })">
-            <CancelIcon class="w-6 h-6 cursor-pointer" />
-          </span>
-        </div>
+      <CardSkeleton
+        v-else-if="booking.status === 'inProgress'"
+        :bookId="booking.bookId"
+        @updateBooking="updateBooking"
+      >
         <div class="flex flex-1 flex-col justify-center">
           <div class="m-16">
             <h1 class="mb-4 text-lg font-medium leading-6 text-gray-900">
@@ -205,29 +205,24 @@ const handleSaveArrivalTime = async () => {
             </div>
           </div>
         </div>
-      </div>
-      <div v-else-if="booking.status === 'done'" class="status-card">
-        <div class="flex justify-end" title="Cancel">
-          <span @click="updateBooking(booking.bookId, { status: 'todo' })">
-            <CancelIcon class="w-6 h-6 cursor-pointer" />
-          </span>
-        </div>
+      </CardSkeleton>
+      <CardSkeleton
+        v-else-if="booking.status === 'done'"
+        :bookId="booking.bookId"
+        @updateBooking="updateBooking"
+      >
         <div class="flex flex-1 m-12 justify-center items-center">
           <SentIcon class="w-12 h-12 text-green-500" />
         </div>
-      </div>
-      <div v-else-if="booking.status === 'error'" class="status-card">
-        <div class="flex justify-end" title="Cancel">
-          <span @click="updateBooking(booking.bookId, { status: 'todo' })">
-            <CancelIcon class="w-6 h-6 cursor-pointer" />
-          </span>
-        </div>
+      </CardSkeleton>
+      <CardSkeleton v-else-if="booking.status === 'error'">
+        <div class="flex flex-1 m-12 justify-center items-center">Error</div>
+      </CardSkeleton>
+      <div v-else-if="booking.status === 'other'" class="status-card">
         <div class="flex flex-1 m-12 justify-center items-center">
-          <div class="w-12 h-12 text-grey-500">Error</div>
+          There is no way to contact the guest <br />
+          (no phone and no email)
         </div>
-      </div>
-      <div v-if="booking.status === 'other'" class="status-card">
-        <div>There is no way to contact the guest (no phone and no email)</div>
       </div>
     </div>
   </div>
