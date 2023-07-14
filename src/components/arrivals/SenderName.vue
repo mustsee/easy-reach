@@ -8,7 +8,7 @@ const store = useArrivalsOptionsStore()
 const bookingsStore = useBookingsStore()
 
 let senders = await queryByCollection('senders', 'created_at')
-store.setSenders(senders.map((sender) => sender.name))
+store.setSenders(senders?.map((sender) => sender.name))
 
 // Coming from /settings page, don't set again currentSender and lastSender if already set
 // Buggy...

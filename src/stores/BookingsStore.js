@@ -13,7 +13,9 @@ const ArrivalsOptionsStore = useArrivalsOptionsStore()
 export const useBookingsStore = defineStore('bookings', {
   state: () => ({
     bookings: null,
-    isSendingMail: false
+    isSendingMail: false,
+    isLoadingData: false,
+    isWritingData: false
   }),
   getters: {
     getBookings(state) {
@@ -33,7 +35,9 @@ export const useBookingsStore = defineStore('bookings', {
       if (typeFilter !== 'all') res = res.filter((booking) => booking.type === typeFilter)
       if (statusFilter !== 'all') {
         if (statusFilter === 'todo') {
-          res = res.filter((booking) => booking.status === 'todo' || booking.status === 'inProgress')
+          res = res.filter(
+            (booking) => booking.status === 'todo' || booking.status === 'inProgress'
+          )
         } else {
           res = res.filter((booking) => booking.status === statusFilter)
         }
@@ -138,19 +142,22 @@ export const useBookingsStore = defineStore('bookings', {
 
     async writeGuestsData(dataUpdate = false) {
       try {
+        this.isWritingData = true
         const url = 'getArrivals?date=' + dateStore.apiDate + (dataUpdate ? '&updateData=true' : '')
         const response = await fetch(functionBaseURL + url)
         const res = await response.json()
         if (res.success) {
-          // dispatch('dataLastUpdate')
           return res
         }
       } catch (e) {
-        console.log('Error in writeGuestsData: ', error) // TODO: I guess this code is unreachable
+        console.log('Error in writeGuestsData: ', e) 
+      } finally {
+        this.isWritingData = false
       }
     },
     async loadGuestsData() {
       try {
+        this.isLoadingData = true
         const res = await queryByCollection(`guests/${dateStore.apiDate}/bookings`, 'guestName')
         this.bookings = {
           ...this.bookings,
@@ -160,9 +167,9 @@ export const useBookingsStore = defineStore('bookings', {
           this.setSenderName(ArrivalsOptionsStore.currentSender)
         }
       } catch (e) {
-        // throw new Error('Error !!!') // To reach the next catch, throw this
-        // to pass the actual error, don't throw a new one : throw(e) will do
         console.log('Error in loadGuestsData: ', e)
+      } finally {
+        this.isLoadingData = false
       }
     },
     async updateBooking(bookId, value) {

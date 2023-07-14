@@ -57,38 +57,30 @@ const offSet = ref(0)
 const minOffSet = -10
 const maxOffSet = 10
 
-const debounce = ref(false)
-const debounceLoadData = ref(false)
-
 const preventPrevious = computed(() => {
-  return offSet.value <= minOffSet || debounce.value
+  return offSet.value <= minOffSet || bookingsStore.isLoadingData
 })
 
 const preventNext = computed(() => {
-  return offSet.value >= maxOffSet || debounce.value
+  return offSet.value >= maxOffSet || bookingsStore.isLoadingData
 })
 
 const preventUpdate = computed(() => {
-  return !bookingsStore.getNumberOfGuests || debounceLoadData.value
+  return !bookingsStore.getNumberOfGuests || bookingsStore.isWritingData
 })
 
 const handleDate = (increaseBy) => {
-  if (debounce.value) return
-  debounce.value = true
   offSet.value = offSet.value + increaseBy
   dateStore.setCurrentDate(increaseBy)
-  bookingsStore.loadGuestsData().finally(() => (debounce.value = false))
+  bookingsStore.loadGuestsData()
 }
 
 const handleUpdateData = () => {
-  if (debounceLoadData.value) return
-  debounceLoadData.value = true
   bookingsStore
     .writeGuestsData(true)
     .then((res) => {
       if (res.length > 0) bookingsStore.loadGuestsData()
     })
     .catch((error) => console.log('Error in handleUpdateData function: ', error)) // Unreachable code
-  setTimeout(() => (debounceLoadData.value = false), 5000)
 }
 </script>
