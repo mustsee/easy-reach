@@ -28,10 +28,28 @@ const writeData = () => {
 <template>
   <ArrivalsMenu :bookings="bookingsStore.getBookings" />
   <CardLoader v-if="bookingsStore.isWritingData" />
-  <div v-else-if="(!bookingsStore.getNumberOfGuests && !bookingsStore.isLoadingData)">
+  <div v-else-if="!bookingsStore.getNumberOfGuests && !bookingsStore.isLoadingData">
     <NoGuests @writeData="writeData" :preventClick="bookingsStore.isWritingData" />
   </div>
   <div v-else>
-    <GuestCard v-for="booking in bookingsStore.filteredBookings" :booking="booking" />
+    <TransitionGroup name="cards">
+      <GuestCard
+        v-for="booking in bookingsStore.filteredBookings"
+        :booking="booking"
+        :key="booking.bookId"
+      />
+    </TransitionGroup>
   </div>
 </template>
+
+<style>
+.cards-enter-active,
+.cards-leave-active {
+  transition: all 0.2s ease;
+}
+.cards-enter-from,
+.cards-leave-to {
+  opacity: 0.5;
+  /* transform: translateX(15px); */
+}
+</style>
