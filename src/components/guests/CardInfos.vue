@@ -20,7 +20,7 @@ const handleCloseInput = () => {
 }
 
 const handleSaveArrivalTime = async () => {
-  // bookingsStore.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
+  // store.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
   try {
     await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value)
   } finally {
@@ -35,8 +35,8 @@ const handleSaveArrivalTime = async () => {
     <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ booking.name }}</h3>
     <p class="mt-6 text-base text-gray-500 truncate">
       <span v-if="booking.groupReservation">(group of {{ booking.personsInGroup }})<br /></span>
-      {{ booking.phone ? booking.phone : 'No phone' }} <br />
-      {{ booking.email ? booking.email : 'No email' }}
+      <span data-cy="phone">{{ booking.phone ? booking.phone : 'No phone' }} </span><br />
+      <span data-cy="email">{{ booking.email ? booking.email : 'No email' }}</span>
     </p>
     <div class="mt-8">
       <div class="flex items-center">
@@ -51,17 +51,19 @@ const handleSaveArrivalTime = async () => {
             <p class="text-gray-900">Arrival time</p>
             <div v-if="!displayInput">
               <EditIcon
+                data-cy="edit"
                 @click="handleDisplayInput"
                 class="ml-2 h-3 w-3 cursor-pointer"
                 title="Edit Arrival time section in Beds24"
               />
             </div>
           </div>
-          <p v-if="!displayInput" class="text-sm text-gray-700">
+          <p data-cy="arrival-time" v-if="!displayInput" class="text-sm text-gray-700">
             {{ booking.arrivalTime ? booking.arrivalTime : 'No data' }}
           </p>
           <div v-else>
             <input
+              data-cy="input"
               v-model="arrivalTimeText"
               type="text"
               spellcheck="false"
@@ -76,6 +78,7 @@ const handleSaveArrivalTime = async () => {
                 Save
               </button>
               <button
+                data-cy="cancel"
                 @click="handleCloseInput"
                 class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
               >
@@ -87,6 +90,7 @@ const handleSaveArrivalTime = async () => {
         <li class="lg:col-span-1">
           <p class="text-gray-900">Comments</p>
           <p
+            data-cy="comments"
             class="text-sm text-gray-700"
             v-html="`${booking.guestCommentsModified ? booking.guestCommentsModified : 'No data'}`"
           ></p>

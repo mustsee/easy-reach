@@ -1,22 +1,9 @@
 import TopCards from '../../arrivals/TopCards.vue'
-
-let bookings = []
-let data = [
-  ['todo', 'whatsapp'],
-  ['done', 'email'],
-  ['todo', 'email'],
-  ['other', 'other']
-]
-data.forEach((item) => {
-  bookings.push({
-    status: item[0],
-    type: item[1]
-  })
-})
+import { bookings } from '../../../../cypress/data/bookings'
 
 describe('TopCards', () => {
   it('renders properly with bookings', () => {
-    cy.mount(TopCards, { props: { bookings: bookings } })
+    cy.mount(TopCards, { props: { bookings } })
   })
 
   it('renders properly with no bookings', () => {
