@@ -16,6 +16,9 @@ import ProgressionIcon from './assets/icons/Progression.vue'
 import LoadIcon from './assets/icons/Load.vue'
 import ArrowDownIcon from './assets/icons/ArrowDown.vue'
 
+import Vue3Toasity from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -43,6 +46,12 @@ app
   .component('ProgressionIcon', ProgressionIcon)
   .component('LoadIcon', LoadIcon)
   .component('ArrowDownIcon', ArrowDownIcon)
+
+app.use(Vue3Toasity, {
+  autoClose: 3000,
+  transition: 'slide',
+  hideProgressBar: true
+})
 
 app.use(createPinia())
 app.use(router)

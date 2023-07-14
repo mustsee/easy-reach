@@ -20,7 +20,7 @@ import GuestCard from '../components/guests/Card.vue'
 
 const writeData = () => {
   bookingsStore.writeGuestsData().then((res) => {
-    if (res.length > 0) bookingsStore.loadGuestsData()
+    if (res?.length > 0) bookingsStore.loadGuestsData()
   })
 }
 </script>

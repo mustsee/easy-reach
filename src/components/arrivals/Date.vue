@@ -76,11 +76,8 @@ const handleDate = (increaseBy) => {
 }
 
 const handleUpdateData = () => {
-  bookingsStore
-    .writeGuestsData(true)
-    .then((res) => {
-      if (res.length > 0) bookingsStore.loadGuestsData()
-    })
-    .catch((error) => console.log('Error in handleUpdateData function: ', error)) // Unreachable code
+  bookingsStore.writeGuestsData(true).then((res) => {
+    if (res?.length > 0) bookingsStore.loadGuestsData()
+  })
 }
 </script>

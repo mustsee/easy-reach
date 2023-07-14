@@ -3,6 +3,7 @@ import { functionBaseURL } from './../firebase/setup'
 import { useDateStore } from './DateStore'
 import { useMessagesStore } from './MessagesStore'
 import { useArrivalsOptionsStore } from './ArrivalsOptionsStore'
+import { toast } from 'vue3-toastify'
 
 import { queryByCollection, set } from '../firebase/firestore'
 
@@ -150,7 +151,12 @@ export const useBookingsStore = defineStore('bookings', {
           return res
         }
       } catch (e) {
-        console.log('Error in writeGuestsData: ', e) 
+        toast('Error while writing data', {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: false,
+          type: 'error'
+        })
+        //console.log('Error while writing data: ', e)
       } finally {
         this.isWritingData = false
       }
@@ -167,7 +173,12 @@ export const useBookingsStore = defineStore('bookings', {
           this.setSenderName(ArrivalsOptionsStore.currentSender)
         }
       } catch (e) {
-        console.log('Error in loadGuestsData: ', e)
+        toast('Error while loading data', {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: false,
+          type: 'error',
+        })
+        //console.log('Error while loading data: ', e)
       } finally {
         this.isLoadingData = false
       }
