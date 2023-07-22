@@ -48,6 +48,36 @@ export const useBookingsStore = defineStore('bookings', {
     }
   },
   actions: {
+    setCustomMessage(bookId, messageType) {
+      let updatedBookings = this.bookings[dateStore.apiDate].map((booking) => {
+        if (booking.bookId === bookId) {
+          booking.custom = true
+          booking.messageType = `custom-${messageType}`
+          const message = messagesStore.customMessages.find(
+            (message) => message.messageType === messageType
+          )
+          const { text, variables } = message
+          const senderName = ArrivalsOptionsStore.currentSender
+            ? ArrivalsOptionsStore.currentSender
+            : '--senderName--'
+          let modifiedText = JSON.parse(text)
+          for (const variable of variables) {
+            let replaceBy = booking[variable]
+              ? booking[variable]
+              : variable === 'senderName'
+              ? senderName
+              : `--${variable}--`
+            modifiedText = modifiedText.replace(`--${variable}--`, replaceBy)
+          }
+          booking.text = modifiedText
+        }
+        return booking
+      })
+      this.bookings = {
+        ...this.bookings,
+        [dateStore.apiDate]: updatedBookings
+      }
+    },
     setMessage(bookId, messageType) {
       /* Modify : messageType, type, text */
       /* Put these informations to firestore to get in sync */
@@ -176,7 +206,7 @@ export const useBookingsStore = defineStore('bookings', {
         toast('Error while loading data', {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: false,
-          type: 'error',
+          type: 'error'
         })
         //console.log('Error while loading data: ', e)
       } finally {

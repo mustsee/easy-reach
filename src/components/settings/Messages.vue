@@ -75,6 +75,7 @@ const handleCancelSelection = (selection) => {
 
 const addMessage = async () => {
   const message = {
+    custom: true,
     messageType: getMessageType(name.value),
     variables: variablesSelected.value,
     name: name.value,
