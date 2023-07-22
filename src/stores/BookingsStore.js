@@ -81,12 +81,14 @@ export const useBookingsStore = defineStore('bookings', {
     setMessage(bookId, messageType) {
       /* Modify : messageType, type, text */
       /* Put these informations to firestore to get in sync */
+      let bookingText = ''
       let updatedBookings = this.bookings[dateStore.apiDate].map((booking) => {
         if (booking.bookId === bookId) {
           booking.messageType = messageType
+          booking.custom = false
           if (messageType === 'emailMessage') {
             booking.type = 'email'
-          } else if (!(messageType === 'other')) {
+          } else {
             booking.type = 'whatsapp'
           }
           const message = messagesStore.messages.find(
@@ -106,6 +108,8 @@ export const useBookingsStore = defineStore('bookings', {
             modifiedText = modifiedText.replace(`--${variable}--`, replaceBy)
           }
           booking.text = modifiedText
+          // Set text without sender name !! // Like we have in Firestore
+          bookingText = this.replaceVariablesInText(booking, message)
         }
         return booking
       })
@@ -113,12 +117,8 @@ export const useBookingsStore = defineStore('bookings', {
       // Surely can do better
       set(`guests/${dateStore.apiDate}/bookings/${bookId}`, {
         messageType,
-        type:
-          messageType === 'emailMessage'
-            ? 'email'
-            : !(messageType === 'other')
-            ? 'whatsapp'
-            : 'other'
+        type: messageType === 'emailMessage' ? 'email' : 'whatsapp',
+        text: bookingText
       })
       this.bookings = {
         ...this.bookings,

@@ -38,14 +38,14 @@ export const useMessagesStore = defineStore('messages', {
         name: 'Email Message',
         variables: ['guestFirstName', 'senderName', 'dayOfWeek'],
         text: `Hi --guestFirstName--, this is --senderName--, I hope you are well and thanks again for booking with us.\nCould you please let us know what time you will be arriving --dayOfWeek-- and also if you have a WhatsApp number?\nPlease bear in mind we are at the very top of our building and there are a quite a few steps to reach reception level. See you soon!`
-      },
-      {
+      }
+      /*       {
         custom: false,
         messageType: 'other',
         name: 'Other',
         variables: [],
         text: `Write here custom message`
-      }
+      } */
     ]
   }),
   getters: {},

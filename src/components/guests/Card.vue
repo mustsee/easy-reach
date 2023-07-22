@@ -13,10 +13,6 @@ const messagesStore = useMessagesStore()
 
 const props = defineProps(['booking'])
 
-onMounted(() => {
-  // bookingsStore.setMessage(props.booking.bookId, props.booking.messageType)
-})
-
 const getWhatsAppLink = computed(() => {
   // https://web.whatsapp.com/send?phone=whatsappphonenumber&text=urlencodedtext
   let encodedText = encodeURI(props.booking.text) // TODO: Change that
