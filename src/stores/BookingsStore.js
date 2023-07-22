@@ -188,11 +188,11 @@ export const useBookingsStore = defineStore('bookings', {
         }
       } catch (e) {
         // TODO: It never goes here !
-        toast('Error while writing data', {
+        /* toast('Error while writing data', {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: false,
           type: 'error'
-        })
+        }) */
         //console.log('Error while writing data: ', e)
       } finally {
         this.isWritingData = false

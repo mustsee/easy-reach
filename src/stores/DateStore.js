@@ -41,6 +41,9 @@ export const useDateStore = defineStore('date', {
         value = new Date(this.currentDate.setDate(this.currentDate.getDate() + increaseBy))
       }
       this.currentDate = value
+    },
+    setCurrentDateBis(date) {
+      this.currentDate = new Date(date) 
     }
   }
 })
