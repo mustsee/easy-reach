@@ -179,8 +179,15 @@ export const useBookingsStore = defineStore('bookings', {
         const res = await response.json()
         if (res.success) {
           return res
+        } else {
+          toast('Error while writing data', {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: false,
+            type: 'error'
+          })
         }
       } catch (e) {
+        // TODO: It never goes here !
         toast('Error while writing data', {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: false,
@@ -286,11 +293,30 @@ export const useBookingsStore = defineStore('bookings', {
         const res = await response.json()
         // This is the way to take care of firefunctions, if I write them ok.
         if (res.success) {
+          // toast
           this.updateBooking(booking.bookId, { status: 'done' })
           this.updateArrivalTimeSection(booking.bookId, booking.type, booking.arrivalTime)
         } else {
+          // toast
           this.updateBooking(booking.bookId, { status: 'error' })
           console.log('Error in sendEmail: ', res.error)
+        }
+      } finally {
+        this.isSendingMail = false
+      }
+    },
+    async sendEmailSimple(booking) {
+      try {
+        this.isSendingMail = true
+        const url =
+          'sendEmail?guestEmail=' + booking.email + '&text=' + JSON.stringify(booking.text)
+        const response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        if (res.success) {
+          // toast
+        } else {
+          // toast
+          console.log('Error in sendEmailSimple: ', res.error)
         }
       } finally {
         this.isSendingMail = false

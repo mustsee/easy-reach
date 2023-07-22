@@ -23,6 +23,10 @@ const sendEmail = (booking) => {
   bookingsStore.sendEmail(booking)
 }
 
+const sendEmailSimple = (booking) => {
+  bookingsStore.sendEmailSimple(booking)
+}
+
 const updateBooking = (bookId, value) => {
   bookingsStore.updateBooking(bookId, value)
 }
@@ -47,13 +51,22 @@ const updateArrivalTimeSection = (booking, value) => {
         <Text :bookId="booking.bookId" :text="booking.text" class="mt-6" />
         <div class="mt-8">
           <div v-if="booking.custom" class="block sm:flex sm:justify-between">
-            <div
-              class="mb-4 sm:mb-0 flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100"
+            <a
+              :href="getWhatsAppLink"
+              target="_blank"
+              :class="[
+                !booking.phone && 'prevent-click',
+                'mb-4 sm:mb-0 flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100'
+              ]"
             >
               Open in <WhatsAppIcon class="w-6 h-6 ml-2" />
-            </div>
+            </a>
             <div
-              class="flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100"
+              @click="sendEmailSimple(booking)"
+              :class="[
+                bookingsStore.isSendingMail ? 'prevent-click' : '',
+                'flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100'
+              ]"
             >
               Send email <EmailLightIcon class="w-6 h-6 ml-2" />
             </div>

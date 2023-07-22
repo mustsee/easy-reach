@@ -3,7 +3,7 @@ defineProps(['bookId'])
 </script>
 
 <template>
-  <div class="status-card">
+  <div class="status-card lg:flex-none">
     <div class="flex justify-end">
       <CancelIcon
         @click="$emit('updateBooking', bookId, { status: 'todo' })"
