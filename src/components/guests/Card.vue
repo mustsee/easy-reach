@@ -64,6 +64,7 @@ const updateArrivalTimeSection = (booking, value) => {
             <div
               @click="sendEmailSimple(booking)"
               :class="[
+                !booking.email && 'prevent-click',
                 bookingsStore.isSendingMail ? 'prevent-click' : '',
                 'flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100'
               ]"
