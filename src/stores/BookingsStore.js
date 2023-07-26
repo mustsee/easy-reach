@@ -228,6 +228,22 @@ export const useBookingsStore = defineStore('bookings', {
         console.log('Error while updating booking: ', error)
       }
     },
+    async updateGuestPhone(bookId, guestPhone) {
+      try {
+        const url = 'updateGuestPhone?bookId=' + bookId + '&guestPhone=' + guestPhone
+        const response = await fetch(functionBaseURL + url)
+        const res = await response.json()
+        if (res.success) {
+          await this.updateBooking(bookId, { phone: res.phone })
+          return { success: true }
+        } else {
+          // It goes here
+          console.log('Error in updateGuestPhone: ', error) // TODO: Never goes here
+        }
+      } catch (error) {
+        console.log('Error in updateGuestPhone: ', error) // TODO: Never goes here
+      }
+    },
     async updateArrivalTimeSectionEdit(bookId, arrivalTimeText) {
       try {
         const url =

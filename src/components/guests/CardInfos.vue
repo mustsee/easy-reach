@@ -28,6 +28,28 @@ const handleSaveArrivalTime = async () => {
     displayInput.value = false
   }
 }
+
+const displayPhoneInput = ref(false)
+const guestPhone = ref(props.booking.phone)
+
+const handleDisplayPhoneInput = () => {
+  displayPhoneInput.value = true
+  guestPhone.value = props.booking.phone
+}
+
+const handleClosePhoneInput = () => {
+  displayPhoneInput.value = false
+  guestPhone.value = props.booking.phone
+}
+
+const handleSaveGuestPhone = async () => {
+  try {
+    await bookingsStore.updateGuestPhone(props.booking.bookId, guestPhone.value)
+  } finally {
+    displayPhoneInput.value = false
+  }
+}
+
 </script>
 
 <template>
@@ -35,7 +57,40 @@ const handleSaveArrivalTime = async () => {
     <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ booking.name }}</h3>
     <p class="mt-6 text-base text-gray-500 truncate">
       <span v-if="booking.groupReservation">(group of {{ booking.personsInGroup }})<br /></span>
-      <span data-cy="phone">{{ booking.phone ? booking.phone : 'No phone' }} </span><br />
+      <div class="flex items-center">
+        <div v-if="!displayPhoneInput">{{ booking.phone ? booking.phone : 'No phone' }} </div>
+        <div v-if="!displayPhoneInput"> 
+          <EditIcon
+            @click="handleDisplayPhoneInput"
+            class="ml-2 h-3 w-3 cursor-pointer"
+            title="Edit Guest phone section in Beds24"
+          />
+        </div>
+        <div v-else>
+          <input
+            v-model="guestPhone"
+            type="text"
+            spellcheck="false"
+            placeholder="Update Guest phoe"
+            class="mt-2 text-sm px-4 py-1 border border-gray-200 rounded-sm focus:shadow-md focus:outline-none mb-2"
+          />
+          <div class="flex gap-4 mb-5">
+            <button
+              @click="handleSaveGuestPhone"
+              class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+            >
+              Save
+            </button>
+            <button
+              data-cy="cancel"
+              @click="handleClosePhoneInput"
+              class="text-sm py-1 bg-white hover:bg-gray-100 border border-gray-200 rounded-sm w-20"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
       <span data-cy="email">{{ booking.email ? booking.email : 'No email' }}</span>
     </p>
     <div class="mt-8">
@@ -51,7 +106,7 @@ const handleSaveArrivalTime = async () => {
             <p class="text-gray-900">Arrival time</p>
             <div v-if="!displayInput">
               <EditIcon
-                data-cy="edit"
+                data-cy="edit arrival time"
                 @click="handleDisplayInput"
                 class="ml-2 h-3 w-3 cursor-pointer"
                 title="Edit Arrival time section in Beds24"
