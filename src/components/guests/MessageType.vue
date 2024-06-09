@@ -3,12 +3,14 @@ import { computed, onMounted, ref } from 'vue'
 import { queryByCollection } from '../../firebase/firestore'
 import { useMessagesStore } from '../../stores/MessagesStore'
 import { useBookingsStore } from '../../stores/BookingsStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore'
 import SelectSkeleton from '../../components/reusable/SelectSkeleton.vue'
 
 const props = defineProps(['bookId', 'messageType'])
 
 const messagesStore = useMessagesStore()
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 const customMessages = ref()
 
 onMounted(async () => {
@@ -40,6 +42,7 @@ const currentMessage = computed({
       :name="'messages-' + bookId"
       :id="'messages-' + bookId"
       v-model="currentMessage"
+      @click="clickCounterStore.log('card_messageType')"
     >
       <optgroup label="Premade">
         <option v-for="message in messagesStore.messages" :value="message.messageType">

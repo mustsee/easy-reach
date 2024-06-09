@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
 import { useMessagesStore } from '../../stores/MessagesStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore'
 
 import CardSkeleton from '../reusable/CardSkeleton.vue'
 import CardInfos from './CardInfos.vue'
@@ -10,6 +11,7 @@ import Text from './Text.vue'
 
 const bookingsStore = useBookingsStore()
 const messagesStore = useMessagesStore()
+const clickCounterStore = useClickCounterStore()
 
 const props = defineProps(['booking'])
 
@@ -20,10 +22,12 @@ const getWhatsAppLink = computed(() => {
 })
 
 const sendEmail = (booking) => {
+  clickCounterStore.log('card_mail')
   bookingsStore.sendEmail(booking)
 }
 
 const sendEmailSimple = (booking) => {
+  clickCounterStore.log('card_customMail')
   bookingsStore.sendEmailSimple(booking)
 }
 
@@ -58,6 +62,7 @@ const updateArrivalTimeSection = (booking, value) => {
                 !booking.phone && 'prevent-click',
                 'mb-4 sm:mb-0 flex justify-center w-full sm:w-1/3 border border-gray-400 rounded-md py-3 px-5 text-gray-700 bg-white cursor-pointer hover:bg-gray-100'
               ]"
+              @click="clickCounterStore.log('card_customWhatsApp')"
             >
               Open in <WhatsAppIcon class="w-6 h-6 ml-2" />
             </a>
@@ -86,7 +91,7 @@ const updateArrivalTimeSection = (booking, value) => {
           </div>
           <div v-else-if="booking.type === 'whatsapp'" class="action-button rounded-md shadow">
             <a
-              @click="updateBooking(booking.bookId, { status: 'inProgress' })"
+              @click="updateBooking(booking.bookId, { status: 'inProgress' }); clickCounterStore.log('card_whatsApp')"
               :href="getWhatsAppLink"
               :class="['main-action-button text-green-600 border-green-600  hover:bg-green-200']"
               target="_blank"

@@ -1,10 +1,12 @@
 <script setup>
 import { computed } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore';
 
 const props = defineProps(['bookId', 'text'])
 
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 
 const currentText = computed({
   get() {
@@ -28,6 +30,7 @@ const currentText = computed({
       placeholder="Text to be sent to the guest"
       class="flex-1 p-2 m-1 focus:outline-none"
       name="output"
+      @click="clickCounterStore.log('card_text')"
     ></textarea>
   </div>
 </template>

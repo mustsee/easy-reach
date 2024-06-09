@@ -1,11 +1,14 @@
 <script setup>
 import { useArrivalsOptionsStore } from './../../stores/ArrivalsOptionsStore'
 import { useBookingsStore } from '../../stores/BookingsStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore'
+
 import { queryByCollection } from '../../firebase/firestore'
 import SelectSkeleton from '../reusable/SelectSkeleton.vue'
 
 const store = useArrivalsOptionsStore()
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 
 let senders = await queryByCollection('senders', 'created_at')
 store.setSenders(senders?.map((sender) => sender.name))
@@ -35,6 +38,7 @@ store.$subscribe((mutation, state) => {
       class="select"
       name="senderName"
       id="senderName"
+      @click="clickCounterStore.log('filter_name')"
     >
       <option disabled value="">Sender name</option>
       <option v-for="sender in store.senders" :value="sender">

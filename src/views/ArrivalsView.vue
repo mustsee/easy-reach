@@ -2,15 +2,19 @@
 import CardLoader from '../components/guests/CardLoader.vue'
 import { useDateStore } from '../stores/DateStore'
 import { useBookingsStore } from './../stores/BookingsStore'
+import { useClickCounterStore } from './../stores/clickCounterStore'
 
 const dateStore = useDateStore()
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 
 // On first load, set date once
 dateStore.setCurrentDate()
 
 // Then get bookings[date]
 bookingsStore.loadGuestsData()
+
+clickCounterStore.log("data_firstLoad")
 </script>
 
 <script setup>
@@ -19,6 +23,7 @@ import NoGuests from '../components/guests/NoGuests.vue'
 import GuestCard from '../components/guests/Card.vue'
 
 const writeData = () => {
+  clickCounterStore.log("data_mainLoad")
   bookingsStore.writeGuestsData().then((res) => {
     if (res?.length > 0) bookingsStore.loadGuestsData()
   })

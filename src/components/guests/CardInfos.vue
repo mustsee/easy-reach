@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore'
 
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 
 const props = defineProps(['booking'])
 
@@ -10,16 +12,19 @@ const displayInput = ref(false)
 const arrivalTimeText = ref(props.booking.arrivalTime)
 
 const handleDisplayInput = () => {
+  clickCounterStore.log("card_arrivalTimeDisplayInput")
   displayInput.value = true
   arrivalTimeText.value = props.booking.arrivalTime
 }
 
 const handleCloseInput = () => {
+  clickCounterStore.log("card_arrivalTimeCloseInput")
   displayInput.value = false
   arrivalTimeText.value = props.booking.arrivalTime
 }
 
 const handleSaveArrivalTime = async () => {
+  clickCounterStore.log("card_arrivalTimeUpdate")
   // store.updateBooking(booking.bookId, { arrivalTime: arrivalTimeText.value })
   try {
     await bookingsStore.updateArrivalTimeSectionEdit(props.booking.bookId, arrivalTimeText.value)
@@ -33,16 +38,19 @@ const displayPhoneInput = ref(false)
 const guestPhone = ref(props.booking.phone)
 
 const handleDisplayPhoneInput = () => {
+  clickCounterStore.log("card_phoneDisplayInput")
   displayPhoneInput.value = true
   guestPhone.value = props.booking.phone
 }
 
 const handleClosePhoneInput = () => {
+  clickCounterStore.log("card_phoneCloseInput")
   displayPhoneInput.value = false
   guestPhone.value = props.booking.phone
 }
 
 const handleSaveGuestPhone = async () => {
+  clickCounterStore.log("card_phoneUpdate")
   try {
     await bookingsStore.updateGuestPhone(props.booking.bookId, guestPhone.value)
   } finally {
@@ -71,7 +79,7 @@ const handleSaveGuestPhone = async () => {
             v-model="guestPhone"
             type="text"
             spellcheck="false"
-            placeholder="Update Guest phoe"
+            placeholder="Update Guest phone"
             class="mt-2 text-sm px-4 py-1 border border-gray-200 rounded-sm focus:shadow-md focus:outline-none mb-2"
           />
           <div class="flex gap-4 mb-5">

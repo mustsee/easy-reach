@@ -52,11 +52,13 @@
 import { computed, ref } from 'vue'
 import { useDateStore } from '../../stores/DateStore'
 import { useBookingsStore } from '../../stores/BookingsStore'
+import { useClickCounterStore } from '../../stores/clickCounterStore'
 
 import DateItem from '../../components/reusable/DateItem.vue'
 
 const dateStore = useDateStore()
 const bookingsStore = useBookingsStore()
+const clickCounterStore = useClickCounterStore()
 
 /* const offSet = ref(0)
 const minOffSet = -10
@@ -76,16 +78,19 @@ const preventUpdate = computed(() => {
 
 const handleDate = (increaseBy) => {
   // offSet.value = offSet.value + increaseBy
+  clickCounterStore.log(increaseBy > 0 ? "date_next" : "date_previous")
   dateStore.setCurrentDate(increaseBy)
   bookingsStore.loadGuestsData()
 }
 
 const handleCalendar = (date) => {
+  clickCounterStore.log("date_calendar")
   dateStore.setCurrentDateBis(date.target.value)
   bookingsStore.loadGuestsData()
 }
 
 const handleUpdateData = () => {
+  clickCounterStore.log("date_updateData")
   bookingsStore.writeGuestsData(true).then((res) => {
     if (res?.length > 0) bookingsStore.loadGuestsData()
   })
