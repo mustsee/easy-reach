@@ -1,3 +1,11 @@
+# Helpers
+
+Node version 18.14.2
+Launch firebase emulator : firebase emulators:start
+To deploy from main branch :
+  - npm run build
+  - git subtree push --prefix dist origin gh-pages
+
 # easyreach-vue3
 
 This template should help get you started developing with Vue 3 in Vite.

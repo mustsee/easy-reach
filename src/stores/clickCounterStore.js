@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { add } from '../firebase/firestore'
+import { useUserStore } from './UserStore'
 //import { toast } from 'vue3-toastify'
+
+const userStore = useUserStore()
 
 export const useClickCounterStore = defineStore('click-counter', {
   state: () => ({
@@ -34,7 +37,7 @@ export const useClickCounterStore = defineStore('click-counter', {
       const date = now.toLocaleDateString().split('/').reverse().join('')
       const time = now.toLocaleTimeString()
       try {
-        await add(`logs/${date}/${this.logNames[name]}`, {time, navigator: navigator.userAgent})
+        await add(`logs/${date}/${this.logNames[name]}`, {user: userStore.userEmail(), time, navigator: navigator.userAgent})
         /* toast('Success writing log', {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: true,
