@@ -4,6 +4,8 @@ Node version 18.14.2
 Launch firebase emulator : firebase emulators:start
 To deploy from main branch :
   - npm run build
+  - git add --all
+  - git commit -m "Deploy"
   - git subtree push --prefix dist origin gh-pages
 
 # easyreach-vue3
