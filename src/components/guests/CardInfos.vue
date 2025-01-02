@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useBookingsStore } from '../../stores/BookingsStore'
 import { useClickCounterStore } from '../../stores/clickCounterStore'
 
@@ -58,11 +58,18 @@ const handleSaveGuestPhone = async () => {
   }
 }
 
+const referer = computed(() => {
+  return props.booking.referer === 'Booking.com' ? 'B' : props.booking.referer === 'Hostelworld.com' ? 'H' : '-'
+})
+
 </script>
 
 <template>
   <div class="flex-1 px-6 py-8 bg-white lg:p-12">
-    <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ booking.name }}</h3>
+    <div class="flex justify-between items-center">
+      <h3 class="text-2xl font-extrabold text-gray-900 sm:text-3xl">{{ booking.name }}</h3>
+      <div class="py-1 px-3 border border-gray-200 bg-gray-50 font-medium rounded-sm">{{ referer }}</div>
+    </div>
     <p class="mt-6 text-base text-gray-500 truncate">
       <span v-if="booking.groupReservation">(group of {{ booking.personsInGroup }})<br /></span>
       <div class="flex items-center">
